@@ -26,7 +26,7 @@ const Login = ({ navigation }) => {
             setError(error.message);
         })
     }
-//TODO: Få tilbage knappen i toppen
+//TODO: Få tilbage knappen i toppen og tilføj billede
     return (
         <KeyboardAvoidingView
             style={{flex: 1}}

@@ -38,7 +38,7 @@ const CreateUser = ({ navigation }) => {
                             phoneNumber,
                         }).then(() => {
                             console.log('User data saved to database');
-                            navigation.navigate('Home');
+                            navigation.navigate('UserImagePicker');
                         }).catch((dbError) => {
                             setError(dbError.message);
                         });
