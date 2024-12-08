@@ -75,9 +75,9 @@ const UserImagePicker = ({ navigation }) => {
             const imageUrls = await uploadBatchedImages(selectedImages);
             const userRef = ref(database, `users/${auth.currentUser.uid}/userPicks`);
             await update(userRef, { images: imageUrls });
-            Alert.alert("Success", "Listing saved successfully!");
+            Alert.alert("Success", "Successfully saved the images your profile!");
             setSelectedImages([]); // Reset after successful upload
-            navigation.navigate('MyProfile');
+            navigation.navigate('DetailedAboutYou');
         } catch (error) {
             console.error("Error saving images:", error);
             Alert.alert("Error", "Failed to save the images.");
