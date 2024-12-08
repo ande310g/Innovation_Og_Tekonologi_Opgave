@@ -8,7 +8,7 @@ import CreateUser from './Pages/CreateUser';
 import Login from './Pages/Login';
 import CreateListing from './Pages/MitLejemål';
 import UserImagePicker from './Pages/UserImagePicker';
-
+import MyProfile from "./Pages/MyProfile";
 
 
 const Stack  = createStackNavigator();
@@ -29,6 +29,7 @@ const App = () => {
         <Stack.Screen name='Login' component={Login} />
         <Stack.Screen name='CreateListing' component={CreateListing}/>
         <Stack.Screen name='UserImagePicker' component={UserImagePicker}/>
+        <Stack.Screen name='MyProfile' component={MyProfile}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

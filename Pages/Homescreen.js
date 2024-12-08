@@ -10,7 +10,7 @@ const Homescreen = ({ navigation }) => {
         <Text style={globalStyles.buttonText}>Opret bruger</Text>
       </TouchableOpacity>
       <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('Login')}>
-        <Text style={globalStyles.buttonText}>Log ind</Text>r
+        <Text style={globalStyles.buttonText}>Log ind</Text>
       </TouchableOpacity>
       <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('CreateListing')}>
         <Text style={globalStyles.buttonText}>Opret lejemål</Text>

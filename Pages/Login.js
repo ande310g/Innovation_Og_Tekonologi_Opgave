@@ -18,7 +18,7 @@ const Login = ({ navigation }) => {
                 const snapshot = await get(userRef);
 
                 if (snapshot.exists()) {
-                    navigation.navigate('Home');
+                    navigation.navigate('MyProfile');
                 } else {
                     navigation.navigate('Home');
                 }
@@ -26,7 +26,6 @@ const Login = ({ navigation }) => {
             setError(error.message);
         })
     }
-//TODO: Få tilbage knappen i toppen og tilføj billede
     return (
         <KeyboardAvoidingView
             style={{flex: 1}}
