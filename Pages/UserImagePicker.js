@@ -111,16 +111,32 @@ const UserImagePicker = ({ navigation }) => {
                 {selectedImages.length > 0 && (
                     <FlatList
                         data={selectedImages}
-                        renderItem={renderImageItem}
+                        renderItem={({ item }) => (
+                            <View style={{ flex: 1 / 3, margin: 5 }}>
+                                <Image
+                                    source={{ uri: item }}
+                                    style={{
+                                        width: '100%',
+                                        height: 100, // Adjust height as needed
+                                        borderRadius: 8,
+                                    }}
+                                />
+                            </View>
+                        )}
                         keyExtractor={(item, index) => index.toString()}
-                        numColumns={3}
-                        style={globalStyles.grid}
+                        numColumns={3} // Number of columns
+                        contentContainerStyle={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginBottom: 10, // Adjust spacing as needed
+                        }}
                     />
                 )}
 
+
                 {selectedImages.length > 0 && (
                     <TouchableOpacity
-                        style={[globalStyles.button, { backgroundColor: uploading ? '#aaa' : '#007bff' }]}
+                        style={globalStyles.button}
                         onPress={handleSaveData}
                         disabled={uploading}
                     >

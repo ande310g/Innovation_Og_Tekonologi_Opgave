@@ -1,4 +1,7 @@
 import {StyleSheet} from 'react-native';
+import { Platform, StatusBar } from 'react-native';
+
+const statusBarHeight = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
 
 
 export const globalStyles = StyleSheet.create({
@@ -72,15 +75,19 @@ export const globalStyles = StyleSheet.create({
         
     },
     backAndLogoContainer: {
+        position: 'absolute',
+        top: statusBarHeight,
+        left: 0,
+        right: 0,
         height: 67,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: -30,
-        paddingVertical: 0,
-        marginBottom: 10,
+        paddingHorizontal: 10,
+        backgroundColor: '#ffffff', // Ensure it has a background
         borderBottomColor: '#0097B2',
         borderBottomWidth: 1,
+        zIndex: 1000, // Ensure it stays above other components
     },
     title: {    
         fontSize: 24,

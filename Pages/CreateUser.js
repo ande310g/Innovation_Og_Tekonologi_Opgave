@@ -75,10 +75,7 @@ const CreateUser = ({ navigation }) => {
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={globalStyles.container}>
                     <View style={globalStyles.backAndLogoContainer}>
-                        <TouchableOpacity
-                            style={globalStyles.backButton}
-                            onPress={() => navigation.goBack()}
-                        >
+                        <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
                             <Text style={globalStyles.backButton}> ← Tilbage</Text>
                         </TouchableOpacity>
                         <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
