@@ -49,7 +49,7 @@ const Login = ({ navigation }) => {
                     <TextInput style={globalStyles.input}
                                placeholder="Adgangskode"
                                value={password}
-                               onchangeText={setPassword}
+                               onChangeText={setPassword}
                                secureTextEntry={true}/>
                     <TouchableOpacity style={globalStyles.button} onPress={handleLogin}>
                         <Text style={globalStyles.buttonText}>Login</Text>
