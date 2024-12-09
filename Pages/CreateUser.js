@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, Switch, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, Switch, Image, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { set, ref } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
@@ -68,18 +68,20 @@ const CreateUser = ({ navigation }) => {
     };
 
     return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff"}}>
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={globalStyles.container}>
+            <View style={globalStyles.container}>
                     <View style={globalStyles.backAndLogoContainer}>
                         <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
                             <Text style={globalStyles.backButton}> ← Tilbage</Text>
                         </TouchableOpacity>
                         <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
                     </View>
+                    
                     <Text style={globalStyles.title}>Opret bruger</Text>
 
                     <Text style={globalStyles.label}>Navn</Text>
@@ -168,6 +170,7 @@ const CreateUser = ({ navigation }) => {
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 };
 

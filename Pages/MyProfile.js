@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Touchable } from 'react-native';
 import { ref, onValue } from 'firebase/database';
 import { database, auth } from '../Component/firebase';
 import { globalStyles } from './Styles';
+import { useNavigation } from '@react-navigation/native';
 
-const MyProfile = () => {
+
+const MyProfile = ({navigation}) => {
     const [userData, setUserData] = useState({});
     const [profileImage, setProfileImage] = useState(null);
 
@@ -46,7 +48,10 @@ const MyProfile = () => {
             <TouchableOpacity style={globalStyles.button}>
                 <Text style={globalStyles.buttonText}>Find din nye roomie</Text>
             </TouchableOpacity>
-        </View>
+            <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('MyListing')}i>
+                <Text style={globalStyles.buttonText}>Mit lejemål</Text>
+            </TouchableOpacity>
+             </View>
     );
 };
 

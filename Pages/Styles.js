@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 import { Platform, StatusBar } from 'react-native';
 
 const statusBarHeight = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
+const topRibbonHeight = statusBarHeight + 67; // Combine status bar height and container height
 
 
 export const globalStyles = StyleSheet.create({
@@ -9,6 +10,7 @@ export const globalStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingHorizontal: 20,
+        paddingTop: topRibbonHeight, // Add padding to avoid overlap
         backgroundColor: '#ffffff',
     },
     input: {
@@ -76,7 +78,7 @@ export const globalStyles = StyleSheet.create({
     },
     backAndLogoContainer: {
         position: 'absolute',
-        top: statusBarHeight,
+        top: 0, // Stick to the top
         left: 0,
         right: 0,
         height: 67,
@@ -96,7 +98,7 @@ export const globalStyles = StyleSheet.create({
         color: '#0097B2',
         fontFamily: 'gabarito',
         marginBottom: 30,
-    },
+           },
     label: {
         fontSize: 16,
         fontWeight: '600',
@@ -156,4 +158,27 @@ export const globalStyles = StyleSheet.create({
         color: '#007bff',
         fontSize: 14,
     },
+    listItem: {
+        backgroundColor: '#fff',
+        padding: 15,
+        marginBottom: 10,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+      },
+      listTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 5,
+      },
+      listDescription: {
+        fontSize: 14,
+        color: '#555',
+      },
+      listDetails: {
+        fontSize: 12,
+        color: '#888',
+      },
 });

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, TextInput, Text, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
+import {View, TextInput, Text, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Image} from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { ref, get } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
@@ -27,6 +27,7 @@ const Login = ({ navigation }) => {
         })
     }
     return (
+        <SafeAreaView style={{flex: 1, backgroundColor: "#ffffff"}}>
         <KeyboardAvoidingView
             style={{flex: 1}}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -38,6 +39,7 @@ const Login = ({ navigation }) => {
                         <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
                             <Text style={globalStyles.backButton}> ← Tilbage</Text>
                         </TouchableOpacity>
+                        <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
                     </View>
                     <Text style={globalStyles.label}>Mailadresse</Text>
                     <TextInput style={globalStyles.input}
@@ -49,7 +51,7 @@ const Login = ({ navigation }) => {
                     <TextInput style={globalStyles.input}
                                placeholder="Adgangskode"
                                value={password}
-                               onchangeText={setPassword}
+                               onChangeText={setPassword}
                                secureTextEntry={true}/>
                     <TouchableOpacity style={globalStyles.button} onPress={handleLogin}>
                         <Text style={globalStyles.buttonText}>Login</Text>
@@ -58,6 +60,7 @@ const Login = ({ navigation }) => {
             </ScrollView>
 
         </KeyboardAvoidingView>
+        </SafeAreaView>
     )
 }
 export default Login;

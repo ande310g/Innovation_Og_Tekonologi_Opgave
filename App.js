@@ -6,10 +6,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Homescreen from './Pages/Homescreen';
 import CreateUser from './Pages/CreateUser';
 import Login from './Pages/Login';
-import CreateListing from './Pages/MitLejemål';
+import CreateListing from './Pages/OpretLejemål';
 import UserImagePicker from './Pages/UserImagePicker';
 import MyProfile from "./Pages/MyProfile";
 import DetailedAboutYou from "./Pages/DetailedAboutYou";
+import MyListing from './Pages/MyListing';
+import EditListing from './Pages/EditListing';
+import DetailedListing from './Pages/DetailedListing';
 
 const Stack  = createStackNavigator();
 
@@ -31,6 +34,9 @@ const App = () => {
         <Stack.Screen name='UserImagePicker' component={UserImagePicker}/>
         <Stack.Screen name='DetailedAboutYou' component={DetailedAboutYou}/>
         <Stack.Screen name='MyProfile' component={MyProfile}/>
+        <Stack.Screen name='MyListing' component={MyListing}/>
+        <Stack.Screen name='EditListing' component={EditListing}/>
+        <Stack.Screen name='DetailedListing' component={DetailedListing}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
