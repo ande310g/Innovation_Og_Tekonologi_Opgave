@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Touchable } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import { ref, onValue } from 'firebase/database';
-import { database, auth } from '../Component/firebase';
+import { auth, database } from '../Component/firebase';
 import { globalStyles } from './Styles';
 import { useNavigation } from '@react-navigation/native';
 
-
-const MyProfile = ({navigation}) => {
+const MyProfile = ({ navigation }) => {
     const [userData, setUserData] = useState({});
     const [profileImage, setProfileImage] = useState(null);
+    const [menuVisible, setMenuVisible] = useState(false);
 
     useEffect(() => {
         const userRef = ref(database, `users/${auth.currentUser.uid}`);
@@ -19,46 +19,101 @@ const MyProfile = ({navigation}) => {
         });
     }, []);
 
+    const handleLogout = () => {
+        auth.signOut()
+            .then(() => {
+                navigation.replace('Login'); // Replace with your login screen
+            })
+            .catch((error) => {
+                Alert.alert('Logout Error', error.message);
+            });
+    };
+
     return (
-        <View style={[globalStyles.container, styles.profileContainer]}>
-            {/* Profile Picture */}
-            <View style={styles.imageWrapper}>
-                {profileImage ? (
-                    <Image source={{ uri: profileImage }} style={styles.profileImage} />
-                ) : (
-                    <Image
-                        source={require('../assets/Logo.png')} // Replace with your placeholder image
-                        style={styles.profileImage}
-                    />
+        <SafeAreaView style={styles.safeArea}>
+            <View style={[globalStyles.container, styles.profileContainer]}>
+                <TouchableOpacity
+                    style={styles.dropdownToggle}
+                    onPress={() => setMenuVisible(!menuVisible)}
+                >
+                    <Text style={styles.menuText}>☰</Text>
+                </TouchableOpacity>
+
+                {menuVisible && (
+                    <View style={styles.dropdownMenu}>
+                        <TouchableOpacity
+                            style={styles.menuItem}
+                            onPress={() => navigation.navigate('EditProfile')}
+                        >
+                            <Text style={styles.menuItemText}>Edit Profile</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
+                            <Text style={styles.menuItemText}>Logout</Text>
+                        </TouchableOpacity>
+                    </View>
                 )}
+
+                <View style={styles.imageWrapper}>
+                    {profileImage ? (
+                        <Image source={{ uri: profileImage }} style={styles.profileImage} />
+                    ) : (
+                        <Image
+                            source={require('../assets/Logo.png')}
+                            style={styles.profileImage}
+                        />
+                    )}
+                </View>
+
+                <Text style={styles.nameText}>
+                    {`${userData.name || 'Navn ikke angivet'}, ${
+                        userData.dob ? new Date(userData.dob).getFullYear() : 'Alder ikke angivet'
+                    }`}
+                </Text>
+                <Text style={styles.aboutMe}>{userData.aboutMe || 'Ingen beskrivelse tilføjet.'}</Text>
             </View>
-
-            {/* User Information */}
-            <Text style={styles.nameText}>{`${userData.name || 'Navn ikke angivet'}, ${userData.dob ? new Date(userData.dob).getFullYear() : 'Alder ikke angivet'}`}</Text>
-            <Text style={styles.aboutMe}>{userData.aboutMe || 'Ingen beskrivelse tilføjet.'}</Text>
-
-            {/* Tags (example based on user's hasPlace) */}
-            <View style={styles.tagContainer}>
-                {userData.hasPlace && <Text style={styles.tag}>Har værelse</Text>}
-                <Text style={styles.tag}>Søger roommate</Text>
-                <Text style={styles.tag}>Mega sej</Text>
-            </View>
-
-            {/* Find New Roomie Button */}
-            <TouchableOpacity style={globalStyles.button}>
-                <Text style={globalStyles.buttonText}>Find din nye roomie</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('MyListing')}i>
-                <Text style={globalStyles.buttonText}>Mit lejemål</Text>
-            </TouchableOpacity>
-             </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#ffffff',
+    },
     profileContainer: {
         alignItems: 'center',
         paddingVertical: 20,
+    },
+    dropdownToggle: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        zIndex: 10,
+    },
+    menuText: {
+        fontSize: 24,
+        color: '#0097B2',
+    },
+    dropdownMenu: {
+        position: 'absolute',
+        top: 60,
+        right: 20,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        elevation: 5,
+    },
+    menuItem: {
+        padding: 10,
+        borderBottomColor: '#ccc',
+        borderBottomWidth: 1,
+    },
+    menuItemText: {
+        fontSize: 16,
+        color: '#0097B2',
     },
     imageWrapper: {
         width: 120,
@@ -84,21 +139,6 @@ const styles = StyleSheet.create({
         color: '#555',
         textAlign: 'center',
         marginBottom: 20,
-    },
-    tagContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        marginBottom: 20,
-    },
-    tag: {
-        backgroundColor: '#49ACD0',
-        color: '#fff',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 15,
-        margin: 5,
-        fontSize: 14,
     },
 });
 

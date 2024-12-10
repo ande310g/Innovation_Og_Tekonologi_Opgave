@@ -13,7 +13,7 @@ import DetailedAboutYou from "./Pages/DetailedAboutYou";
 import MyListing from './Pages/MyListing';
 import EditListing from './Pages/EditListing';
 import DetailedListing from './Pages/DetailedListing';
-
+import EditProfile from "./Pages/EditProfile";
 const Stack  = createStackNavigator();
 
 
@@ -37,6 +37,7 @@ const App = () => {
         <Stack.Screen name='MyListing' component={MyListing}/>
         <Stack.Screen name='EditListing' component={EditListing}/>
         <Stack.Screen name='DetailedListing' component={DetailedListing}/>
+        <Stack.Screen name='EditProfile' component={EditProfile}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
