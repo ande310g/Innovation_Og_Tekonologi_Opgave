@@ -80,26 +80,26 @@ const MyListing = ({ navigation }) => {
 
     const renderListing = ({ item }) => (
         <TouchableOpacity
-          style={styles.listItem}
+          style={globalStyles.listItem}
           onPress={() => navigation.navigate('DetailedListing', { listingId: item.id })}
           activeOpacity={0.8}
         >
-          <Text style={styles.listTitle}>{item.title}</Text>
-          <Text style={styles.listDescription}>{item.description}</Text>
-          <Text style={styles.listDetails}>{`Størrelse: ${item.size} m2`}</Text>
-          <Text style={styles.listDetails}>{`Pris: $${item.price} ,-`}</Text>
+          <Text style={globalStyles.listTitle}>{item.title}</Text>
+          <Text style={globalStyles.listDescription}>{item.description}</Text>
+          <Text style={globalStyles.listDetails}>{`Størrelse: ${item.size} m2`}</Text>
+          <Text style={globalStyles.listDetails}>{`Pris: $${item.price} ,-`}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
             <TouchableOpacity
-              style={[styles.deleteButton, { backgroundColor: '#4CAF50' }]}
+              style={[globalStyles.button, {height: 40, width: 80}]}
               onPress={() => handleEdit(item.id)}
             >
-              <Text style={styles.deleteButtonText}>Rediger</Text>
+              <Text style={globalStyles.buttonText}>Rediger</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.deleteButton}
+              style={[globalStyles.button, {height: 40, width: 80}]}
               onPress={() => handleDelete(item.id)}
             >
-              <Text style={styles.deleteButtonText}>Slet</Text>
+              <Text style={globalStyles.buttonText}>Slet</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -114,82 +114,45 @@ const MyListing = ({ navigation }) => {
     );
   }
 
-  return listings.length > 0 ? (
+  return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
-        <View style={globalStyles.container}>
-    <View style = {globalStyles.backAndLogoContainer}>
-    <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={globalStyles.backButton}> ← Tilbage</Text>
-    </TouchableOpacity>
-    <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
-    </View>
-    
-      <Text style={globalStyles.title}>Mit Lejemål</Text>
-      <FlatList
-        data={listings}
-        keyExtractor={(item) => item.id}
-        renderItem={renderListing}
-      />
-    </View>
-    </SafeAreaView>
-  ) : (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
-    <View style={globalStyles.container}>
-        <View style = {globalStyles.backAndLogoContainer}>
-        <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+      <View style={globalStyles.container}>
+        <View style={globalStyles.backAndLogoContainer}>
+          <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
             <Text style={globalStyles.backButton}> ← Tilbage</Text>
-        </TouchableOpacity>
-        <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+          </TouchableOpacity>
+          <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
         </View>
-      <Text style={globalStyles.title}>Du har endnu ikke oprettet en annonce for dit lejemål.</Text>
-      <TouchableOpacity
-        style={globalStyles.button}
-        onPress={() => navigation.navigate('CreateListing')}
-      >
-        <Text style={globalStyles.buttonText}>Opret lejemål</Text>
-      </TouchableOpacity>
-    </View>
+        <Text style={globalStyles.title}>Mit Lejemål</Text>
+        
+        {listings.length > 0 ? (
+          <>
+            <FlatList
+              data={listings}
+              keyExtractor={(item) => item.id}
+              renderItem={renderListing}
+            />
+          </>
+        ) : (
+          <Text style={globalStyles.title}>
+            Du har endnu ikke oprettet en annonce for dit lejemål.
+          </Text>
+        )}
+  
+        {/* Add New Listing Button */}
+        <TouchableOpacity
+          style={globalStyles.button}
+          onPress={() => navigation.navigate('CreateListing')}
+        >
+          <Text style={globalStyles.buttonText}>Opret nyt lejemål</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
-
+  
 };
 
-const styles = StyleSheet.create({
-  listItem: {
-    backgroundColor: '#fff',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-  },
-  listTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  listDescription: {
-    fontSize: 14,
-    color: '#555',
-  },
-  listDetails: {
-    fontSize: 12,
-    color: '#888',
-  },
-  deleteButton: {
-    marginTop: 10,
-    backgroundColor: '#ff4d4f',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  deleteButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-});
+
+
 
 export default MyListing;

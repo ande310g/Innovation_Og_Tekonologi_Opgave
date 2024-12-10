@@ -18,6 +18,7 @@ const Login = ({ navigation }) => {
                 const snapshot = await get(userRef);
 
                 if (snapshot.exists()) {
+                    console.log('User data:', snapshot.val());
                     navigation.navigate('MyProfile');
                 } else {
                     navigation.navigate('Home');

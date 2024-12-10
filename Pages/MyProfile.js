@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Touchable, SafeAreaView, Alert } from 'react-native';
 import { ref, onValue } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
 import { globalStyles } from './Styles';
-import { useNavigation } from '@react-navigation/native';
+
 
 const MyProfile = ({ navigation }) => {
     const [userData, setUserData] = useState({});
@@ -30,27 +30,23 @@ const MyProfile = ({ navigation }) => {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={[globalStyles.container, styles.profileContainer]}>
-                <TouchableOpacity
-                    style={styles.dropdownToggle}
-                    onPress={() => setMenuVisible(!menuVisible)}
-                >
-                    <Text style={styles.menuText}>☰</Text>
-                </TouchableOpacity>
-
-                {menuVisible && (
-                    <View style={styles.dropdownMenu}>
-                        <TouchableOpacity
-                            style={styles.menuItem}
-                            onPress={() => navigation.navigate('EditProfile')}
-                        >
-                            <Text style={styles.menuItemText}>Edit Profile</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
-                            <Text style={styles.menuItemText}>Logout</Text>
-                        </TouchableOpacity>
-                    </View>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff"}}>
+        <View style={[globalStyles.container, styles.profileContainer]}>
+            <View style={globalStyles.backAndLogoContainer}>
+          <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+            <Text style={globalStyles.backButton}> ← Tilbage</Text>
+          </TouchableOpacity>
+          <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+        </View>
+            {/* Profile Picture */}
+            <View style={styles.imageWrapper}>
+                {profileImage ? (
+                    <Image source={{ uri: profileImage }} style={styles.profileImage} />
+                ) : (
+                    <Image
+                        source={require('../assets/Logo.png')} // Replace with your placeholder image
+                        style={styles.profileImage}
+                    />
                 )}
 
                 <View style={styles.imageWrapper}>
@@ -71,6 +67,38 @@ const MyProfile = ({ navigation }) => {
                 </Text>
                 <Text style={styles.aboutMe}>{userData.aboutMe || 'Ingen beskrivelse tilføjet.'}</Text>
             </View>
+
+            {/* User Information */}
+            <Text style={styles.nameText}>{`${userData.name || 'Navn ikke angivet'}, ${userData.dob ? new Date(userData.dob).getFullYear() : 'Alder ikke angivet'}`}</Text>
+            <Text style={styles.aboutMe}>{userData.aboutMe || 'Ingen beskrivelse tilføjet.'}</Text>
+            
+
+            {/* Tags (example based on user's hasPlace) */}
+            <View style={styles.tagContainer}>
+                {userData.hasPlace && <Text style={styles.tag}>Har værelse</Text>}
+                <Text style={styles.tag}>Søger roommate</Text>
+                <Text style={styles.tag}>Mega sej</Text>
+            </View>
+
+            {/* Find New Roomie Button - navigerer til swipe for udlejer */}
+            {userData.hasPlace && (
+            <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('Swipe')}>
+                <Text style={globalStyles.buttonText}>Find din nye roomie</Text>
+            </TouchableOpacity>
+            )}
+            {/* Find roomie navigerer til liste over lejemål for lejer */}
+             {!userData.hasPlace && (
+            <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('AllListings')}>
+                <Text style={globalStyles.buttonText}>Find din nye roomie</Text>
+            </TouchableOpacity>
+            )}
+            {/* "Mit lejemål" kun synlig hvis udlejer profil */}
+            {userData.hasPlace && (
+            <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('MyListing')}>
+                <Text style={globalStyles.buttonText}>Mit lejemål</Text>
+            </TouchableOpacity>
+            )}
+             </View>
         </SafeAreaView>
     );
 };
