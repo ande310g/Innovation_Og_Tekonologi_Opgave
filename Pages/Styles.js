@@ -181,4 +181,24 @@ export const globalStyles = StyleSheet.create({
         fontSize: 12,
         color: '#888',
       },
+    pickerContainer: {
+        height: 90, // Match input field height
+        borderColor: 'black',
+        borderWidth: 1,
+        marginBottom: 10,
+        paddingHorizontal: 15,
+        borderRadius: 8,
+        backgroundColor: '#EBEBEB',
+        justifyContent: 'center',
+        zIndex: 10,               // Ensure dropdown appears above other elements
+        position: 'relative',     // Align dropdown with the container
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
+        elevation: 3,
+        overflow: 'scroll',
+    },
+
+
 });

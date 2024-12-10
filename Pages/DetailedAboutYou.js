@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, Switch, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, Switch, Image, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { getAuth } from 'firebase/auth';
 import { set, ref, getDatabase } from 'firebase/database';
 import { globalStyles } from './Styles';
@@ -34,7 +35,7 @@ const DetailedAboutYou = ({ navigation }) => {
             })
                 .then(() => {
                     console.log('Details saved successfully!');
-                    navigation.navigate('MyProfile'); // Navigate back to the previous screen
+                    navigation.navigate('MyProfile');
                 })
                 .catch((err) => {
                     setError(err.message);
@@ -45,6 +46,7 @@ const DetailedAboutYou = ({ navigation }) => {
     };
 
     return (
+        <SafeAreaView style={{flex: 1, backgroundColor: "#ffffff"}}>
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -53,13 +55,13 @@ const DetailedAboutYou = ({ navigation }) => {
                 <View style={globalStyles.container}>
                     <View style={globalStyles.backAndLogoContainer}>
                         <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
-                            <Text style={globalStyles.backButton}>← Back</Text>
+                            <Text style={globalStyles.backButton}>← Tilbage</Text>
                         </TouchableOpacity>
                         <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
                     </View>
-                    <Text style={globalStyles.title}>Tell Us About Yourself</Text>
+                    <Text style={globalStyles.title}>Fortæl os omkring dig selv</Text>
 
-                    <Text style={globalStyles.label}>Profession</Text>
+                    <Text style={globalStyles.label}>Erhverv</Text>
                     <TextInput
                         placeholder="E.g., Software Developer, Student"
                         value={profession}
@@ -67,7 +69,7 @@ const DetailedAboutYou = ({ navigation }) => {
                         style={globalStyles.input}
                     />
 
-                    <Text style={globalStyles.label}>Hobbies</Text>
+                    <Text style={globalStyles.label}>Hobbyer</Text>
                     <TextInput
                         placeholder="E.g., Hiking, Cooking"
                         value={hobbies}
@@ -76,15 +78,22 @@ const DetailedAboutYou = ({ navigation }) => {
                         multiline
                     />
 
-                    <Text style={globalStyles.label}>Noise Tolerance Level</Text>
-                    <TextInput
-                        placeholder="E.g., Low, Medium, High"
-                        value={noiseTolerance}
-                        onChangeText={setNoiseTolerance}
-                        style={globalStyles.input}
-                    />
+                    <Text style={globalStyles.label}>Støj niveau</Text>
+                    <View style={[globalStyles.pickerContainer]}>
+                        <Picker
+                            selectedValue={noiseTolerance}
+                            onValueChange={(itemValue) => setNoiseTolerance(itemValue)}
 
-                    <Text style={globalStyles.label}>Lifestyle</Text>
+                            mode="dropdown" // Explicitly set dropdown mode
+                            dropdownIconColor="black" // Optional: Customize dropdown arrow
+                        >
+                            <Picker.Item label="Vælg niveau" value="" />
+                            <Picker.Item label="Lavt" value="Lavt" />
+                            <Picker.Item label="Mellem" value="Mellem" />
+                            <Picker.Item label="Højt" value="Højt" />
+                        </Picker>
+                    </View>
+                    <Text style={globalStyles.label}>Livstil</Text>
                     <TextInput
                         placeholder="Describe your daily routine, habits, etc."
                         value={aboutLifestyle}
@@ -94,7 +103,7 @@ const DetailedAboutYou = ({ navigation }) => {
                     />
 
                     <View style={globalStyles.switchContainer}>
-                        <Text style={globalStyles.switchLabel}>Do you smoke?</Text>
+                        <Text style={globalStyles.switchLabel}>Ryger du?</Text>
                         <Switch
                             value={smoker}
                             onValueChange={setSmoker}
@@ -104,7 +113,7 @@ const DetailedAboutYou = ({ navigation }) => {
                     </View>
 
                     <View style={globalStyles.switchContainer}>
-                        <Text style={globalStyles.switchLabel}>Do you have pets?</Text>
+                        <Text style={globalStyles.switchLabel}>Har du kæledyr?</Text>
                         <Switch
                             value={hasPets}
                             onValueChange={setHasPets}
@@ -121,6 +130,7 @@ const DetailedAboutYou = ({ navigation }) => {
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 };
 
