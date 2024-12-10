@@ -172,6 +172,7 @@ export const globalStyles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        color: '#0097B2',
       },
       listDescription: {
         fontSize: 14,
@@ -199,6 +200,54 @@ export const globalStyles = StyleSheet.create({
         elevation: 3,
         overflow: 'scroll',
     },
+    pagination: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
+      },
+      paginationButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#0097B2',
+        borderRadius: 5,
+      },
+      paginationText: {
+        color: '#fff',
+        fontWeight: 'bold',
+      },
+      disabledButton: {
+        backgroundColor: '#ddd',
+      },
+      pageIndicator: {
+        fontSize: 16,
+        fontWeight: 'bold',
+      },
+      listItem: {
+        backgroundColor: '#fff',
+        padding: 15,
+        marginBottom: 10,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        borderColor: '#0097B2', 
+        borderWidth: 1.5,
+      },
+      listTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 5,
+      },
+      listDescription: {
+        fontSize: 14,
+        color: '#555',
+      },
+      listDetails: {
+        fontSize: 12,
+        color: '#888',
+      },
 
 
 });
