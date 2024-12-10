@@ -43,7 +43,7 @@ const CreateListing = ({ navigation }) => {
 
         await set(newListingRef, listing);
         await saveToLocalStorage(listing);
-        navigation.navigate('Listings');
+        navigation.navigate('MyListing');
       } else {
         alert("User not logged in");
       }

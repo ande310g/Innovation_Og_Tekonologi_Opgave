@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Homescreen from './Pages/Homescreen';
 import CreateUser from './Pages/CreateUser';
 import Login from './Pages/Login';
-import CreateListing from './Pages/OpretLejemål';
+import CreateListing from './Pages/CreateListing';
 import UserImagePicker from './Pages/UserImagePicker';
 import MyProfile from "./Pages/MyProfile";
 import DetailedAboutYou from "./Pages/DetailedAboutYou";
