@@ -22,7 +22,7 @@ const MyProfile = ({ navigation }) => {
     const handleLogout = () => {
         auth.signOut()
             .then(() => {
-                navigation.replace('Login'); // Replace with your login screen
+                navigation.replace('Home'); // Replace with your login screen
             })
             .catch((error) => {
                 Alert.alert('Logout Error', error.message);
@@ -33,8 +33,8 @@ const MyProfile = ({ navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff"}}>
         <View style={[globalStyles.container, styles.profileContainer]}>
             <View style={globalStyles.backAndLogoContainer}>
-          <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
-            <Text style={globalStyles.backButton}> ← Tilbage</Text>
+          <TouchableOpacity style={globalStyles.backButton} onPress={handleLogout}>
+            <Text style={globalStyles.backButton}>Log ud</Text>
           </TouchableOpacity>
           <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
         </View>

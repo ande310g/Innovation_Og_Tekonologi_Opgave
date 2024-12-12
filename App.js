@@ -29,7 +29,7 @@ const App = () => {
   }
   return (
     <NavigationContainer> 
-      <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}}>
+      <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown:false, gestureEnabled: false}}>
         <Stack.Screen name='Home' component={Homescreen}/> 
         <Stack.Screen name='CreateUser' component={CreateUser}/>
         <Stack.Screen name='Login' component={Login} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import { ref, onValue, set } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
 import { globalStyles } from './Styles';
@@ -53,22 +53,30 @@ const Swipe = ({ navigation }) => {
     const currentProfile = profiles[currentIndex];
 
     return (
+        <SafeAreaView style={globalStyles.container}>
         <View style={globalStyles.container}>
+            <View style={globalStyles.backAndLogoContainer}>
+          <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+            <Text style={globalStyles.backButton}> ← Tilbage</Text>
+          </TouchableOpacity>
+          <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+        </View>
+        <View style={globalStyles.profileContainer}>
             {currentProfile ? (
                 <>
                     <Image
                         source={{ uri: currentProfile.userPicks?.images?.[0] }}
-                        style={styles.profileImage}
+                        style={globalStyles.profileImage}
                     />
-                    <Text style={styles.name}>{currentProfile.name}, {new Date().getFullYear() - new Date(currentProfile.dob).getFullYear()}</Text>
-                    <Text style={styles.about}>{currentProfile.aboutMe}</Text>
+                    <Text style={globalStyles.name}>{currentProfile.name}, {new Date().getFullYear() - new Date(currentProfile.dob).getFullYear()}</Text>
+                    <Text style={globalStyles.about}>{currentProfile.aboutMe}</Text>
 
-                    <View style={styles.actions}>
-                        <TouchableOpacity onPress={handleSwipeLeft} style={styles.noButton}>
-                            <Text style={styles.noText}>Not Interested</Text>
+                    <View style={globalStyles.actions}>
+                        <TouchableOpacity onPress={handleSwipeLeft} style={globalStyles.noButton}>
+                            <Text style={globalStyles.buttonText}> Nej tak</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleSwipeRight} style={styles.yesButton}>
-                            <Text style={styles.yesText}>Match!</Text>
+                        <TouchableOpacity onPress={handleSwipeRight} style={globalStyles.yesButton}>
+                            <Text style={globalStyles.buttonText}>Match!</Text>
                         </TouchableOpacity>
                     </View>
                 </>
@@ -76,46 +84,10 @@ const Swipe = ({ navigation }) => {
                 <Text>No profiles found</Text>
             )}
         </View>
+        </View>
+        </SafeAreaView>
     );
 };
 
-const styles = StyleSheet.create({
-    profileImage: {
-        width: 300,
-        height: 300,
-        borderRadius: 150,
-        marginBottom: 20,
-    },
-    name: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    about: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    actions: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '80%',
-    },
-    noButton: {
-        padding: 10,
-        backgroundColor: 'red',
-        borderRadius: 8,
-    },
-    yesButton: {
-        padding: 10,
-        backgroundColor: 'green',
-        borderRadius: 8,
-    },
-    noText: {
-        color: 'white',
-    },
-    yesText: {
-        color: 'white',
-    },
-});
 
 export default Swipe;
