@@ -65,7 +65,10 @@ const Swipe = ({ navigation }) => {
             {currentProfile ? (
                 <>
                     <Image
-                        source={{ uri: currentProfile.userPicks?.images?.[0] }}
+                        source={
+                            currentProfile.userPicks?.images?.[0]  ? { uri: currentProfile.userPicks?.images?.[0] } 
+                            : require('../assets/Pfp.png')
+                        }
                         style={globalStyles.profileImage}
                     />
                     <Text style={globalStyles.name}>{currentProfile.name}, {new Date().getFullYear() - new Date(currentProfile.dob).getFullYear()}</Text>

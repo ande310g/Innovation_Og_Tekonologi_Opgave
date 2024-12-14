@@ -131,7 +131,11 @@ const CreateListing = ({ navigation }) => {
         onChangeText={setCity}
         style={globalStyles.input}
       />
-      <TouchableOpacity style={globalStyles.button} onPress={handleSubmit}>
+      <TouchableOpacity style={globalStyles.button} onPress={ () => {
+        handleSubmit();
+        navigation.navigate('MyListing');
+      }
+      }>
         <Text style={globalStyles.buttonText}>Submit</Text>
       </TouchableOpacity>
     

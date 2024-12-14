@@ -34,7 +34,7 @@ const MyProfile = ({ navigation }) => {
         <View style={[globalStyles.container, styles.profileContainer]}>
             <View style={globalStyles.backAndLogoContainer}>
           <TouchableOpacity style={globalStyles.backButton} onPress={handleLogout}>
-            <Text style={globalStyles.backButton}>Log ud</Text>
+            <Text style={globalStyles.logoutText}>Log ud</Text>
           </TouchableOpacity>
           <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
         </View>

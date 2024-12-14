@@ -308,6 +308,15 @@ export const globalStyles = StyleSheet.create({
           borderColor: '#49ACD0',
           marginBottom: 50,
         },
+        logoutText: {
+          color: '#49ACD0',
+          fontSize: 18,
+          textAlign: 'center',
+          marginTop: 10,
+          fontFamily: 'gabarito',
+          fontWeight: '600',
+          marginLeft: 15,
+        },
 
 
 });
