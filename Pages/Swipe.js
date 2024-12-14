@@ -25,18 +25,21 @@ const Swipe = ({ navigation }) => {
         if (!swipedUser) return;
 
         try {
-            // Save swipe in database
-            const swipesRef = ref(database, `swipes/${userId}/${swipedUser.uid}`);
-            await set(swipesRef, { match: true });
+            const userSwipesRef = ref(database, `matches/${userId}/${swipedUser.uid}`);
+            const swipedUserMatchesRef = ref(database, `matches/${swipedUser.uid}/${userId}`);
+            const matchData = { name: swipedUser.name };
 
-            Alert.alert("Match!", `You liked ${swipedUser.name}'s profile.`);
+            await set(userSwipesRef, matchData);
+            await set(swipedUserMatchesRef, { name: auth.currentUser.displayName });
+
+            Alert.alert('Match!', `You matched with ${swipedUser.name}.`);
         } catch (error) {
-            console.error("Error saving swipe:", error);
+            console.error('Error saving match:', error);
         }
 
-        // Move to the next profile
         setCurrentIndex((prevIndex) => prevIndex + 1);
     };
+
 
     const handleSwipeLeft = () => {
         setCurrentIndex((prevIndex) => prevIndex + 1);
