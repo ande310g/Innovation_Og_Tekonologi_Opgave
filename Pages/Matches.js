@@ -37,23 +37,29 @@ const Matches = ({ navigation }) => {
                         <Text style={globalStyles.backButton}>← Tilbage</Text>
                     </TouchableOpacity>
                     <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
-
                 </View>
                 <View style={globalStyles.container}>
                     <Text style={globalStyles.title}>Your Matches</Text>
                     {matches.length === 0 ? (
-                        <Text style={styles.noMatchesText}>No matches found</Text>
+                        <Text style={globalStyles.noMatchesText}>No matches found</Text>
                     ) : (
                         <FlatList
                             data={matches}
                             keyExtractor={(item) => item.id}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
-                                    style={styles.listItem}
-                                    onPress={() => handleChatOpen(item)}
+                                    style={globalStyles.listItem}
+                                    onPress={() => navigation.navigate('UserDetail', { userId: item.id })}
                                 >
-                                    <Text style={styles.listTitle}>{item.name}</Text>
+                                    <Text style={globalStyles.listTitle}>{item.name}</Text>
+                                    <TouchableOpacity
+                                        style={styles.zoomButton}
+                                        onPress={() => navigation.navigate('UserDetail', { userId: item.id })}
+                                    >
+                                        <Text style={globalStyles.zoomButtonText}>Zoom</Text>
+                                    </TouchableOpacity>
                                 </TouchableOpacity>
+
                             )}
                         />
                     )}

@@ -89,32 +89,44 @@ const Swipe = ({ navigation }) => {
           </TouchableOpacity>
           <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
         </View>
-        <View style={globalStyles.profileContainer}>
-            {currentProfile ? (
-                <>
-                    <Image
-                        source={
-                            currentProfile.userPicks?.images?.[0]  ? { uri: currentProfile.userPicks?.images?.[0] }
-                            : require('../assets/Pfp.png')
-                        }
-                        style={globalStyles.profileImage}
-                    />
-                    <Text style={globalStyles.name}>{currentProfile.name}, {new Date().getFullYear() - new Date(currentProfile.dob).getFullYear()}</Text>
-                    <Text style={globalStyles.about}>{currentProfile.aboutMe}</Text>
+            <View style={globalStyles.profileContainer}>
+                {currentProfile ? (
+                    <>
+                        {/* Button in the top-right corner to navigate to UserDetail */}
+                        <TouchableOpacity
+                            style={globalStyles.topRightButton}
+                            onPress={() => navigation.navigate('UserDetail', { userId: currentProfile.uid })}
+                        >
+                            <Text style={globalStyles.buttonText}>View Profile</Text>
+                        </TouchableOpacity>
 
-                    <View style={globalStyles.actions}>
-                        <TouchableOpacity onPress={handleSwipeLeft} style={globalStyles.noButton}>
-                            <Text style={globalStyles.buttonText}> Nej tak</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={handleSwipeRight} style={globalStyles.yesButton}>
-                            <Text style={globalStyles.buttonText}>Match!</Text>
-                        </TouchableOpacity>
-                    </View>
-                </>
-            ) : (
-                <Text>No profiles found</Text>
-            )}
-        </View>
+                        <Image
+                            source={
+                                currentProfile.userPicks?.images?.[0]
+                                    ? { uri: currentProfile.userPicks?.images?.[0] }
+                                    : require('../assets/Pfp.png')
+                            }
+                            style={globalStyles.profileImage}
+                        />
+                        <Text style={globalStyles.name}>
+                            {currentProfile.name}, {new Date().getFullYear() - new Date(currentProfile.dob).getFullYear()}
+                        </Text>
+                        <Text style={globalStyles.about}>{currentProfile.aboutMe}</Text>
+
+                        <View style={globalStyles.actions}>
+                            <TouchableOpacity onPress={handleSwipeLeft} style={globalStyles.noButton}>
+                                <Text style={globalStyles.buttonText}>Nej tak</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleSwipeRight} style={globalStyles.yesButton}>
+                                <Text style={globalStyles.buttonText}>Match!</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </>
+                ) : (
+                    <Text>No profiles found</Text>
+                )}
+            </View>
+
         </View>
         </SafeAreaView>
     );

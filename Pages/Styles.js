@@ -317,6 +317,59 @@ export const globalStyles = StyleSheet.create({
           fontWeight: '600',
           marginLeft: 15,
         },
-
-
+    loaderContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    noDataContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 16,
+        color: '#555',
+        marginBottom: 10,
+        fontFamily: 'gabarito',
+    },
+    grid: {
+        marginTop: 15,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+    },
+    imageContainer: {
+        margin: 6,
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
+    image: {
+        width: 120,
+        height: 120,
+        borderRadius: 8,
+        margin: 5,
+        borderColor: '#0097B2',
+        borderWidth: 1,
+    },
+    zoomButton: {
+        backgroundColor: '#007bff',
+        padding: 8,
+        borderRadius: 4,
+        marginTop: 5,
+    },
+    zoomButtonText: {
+        color: '#fff',
+        fontSize: 14,
+        textAlign: 'center',
+    },
+    topRightButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        backgroundColor: '#007bff', // Adjust as needed
+        padding: 10,
+        borderRadius: 5,
+        zIndex: 10, // Ensures it stays on top
+    },
 });

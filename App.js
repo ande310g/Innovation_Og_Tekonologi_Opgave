@@ -18,7 +18,7 @@ import Swipe from './Pages/Swipe';
 import AllListings from './Pages/AllListings';
 import Chat from "./Pages/Chat";
 import Matches from "./Pages/Matches";
-
+import UserDetail from "./Pages/UserDetail";
 const Stack  = createStackNavigator();
 
 
@@ -47,6 +47,7 @@ const App = () => {
         <Stack.Screen name='AllListings' component={AllListings}/>
         <Stack.Screen name='Matches' component={Matches}/>
         <Stack.Screen name='Chat' component={Chat}/>
+        <Stack.Screen name='UserDetail' component={UserDetail}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
