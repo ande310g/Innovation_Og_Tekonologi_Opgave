@@ -25,20 +25,45 @@ const Swipe = ({ navigation }) => {
         if (!swipedUser) return;
 
         try {
-            const userSwipesRef = ref(database, `matches/${userId}/${swipedUser.uid}`);
-            const swipedUserMatchesRef = ref(database, `matches/${swipedUser.uid}/${userId}`);
-            const matchData = { name: swipedUser.name };
+            const currentUserUid = auth.currentUser.uid;
 
-            await set(userSwipesRef, matchData);
-            await set(swipedUserMatchesRef, { name: auth.currentUser.displayName });
+            // Fetch current user's name from the database
+            const currentUserRef = ref(database, `users/${currentUserUid}`);
+            let currentUserName = '';
+
+            await onValue(currentUserRef, (snapshot) => {
+                const userData = snapshot.val();
+                currentUserName = userData?.name || 'Unknown';
+            }, { onlyOnce: true });
+
+            // Reference paths for both users
+            const currentUserMatchesRef = ref(database, `matches/${currentUserUid}/${swipedUser.uid}`);
+            const swipedUserMatchesRef = ref(database, `matches/${swipedUser.uid}/${currentUserUid}`);
+
+            // Data to save for each user
+            const currentUserMatchData = {
+                name: swipedUser.name,
+                role: "seeker", // or "provider" based on the user swiping
+            };
+            const swipedUserMatchData = {
+                name: currentUserName,
+                role: "provider", // or "seeker" depending on the swiped user's role
+            };
+
+            // Save match for both users
+            await set(currentUserMatchesRef, currentUserMatchData);
+            await set(swipedUserMatchesRef, swipedUserMatchData);
 
             Alert.alert('Match!', `You matched with ${swipedUser.name}.`);
         } catch (error) {
             console.error('Error saving match:', error);
         }
 
+        // Move to the next profile
         setCurrentIndex((prevIndex) => prevIndex + 1);
     };
+
+
 
 
     const handleSwipeLeft = () => {
@@ -69,7 +94,7 @@ const Swipe = ({ navigation }) => {
                 <>
                     <Image
                         source={
-                            currentProfile.userPicks?.images?.[0]  ? { uri: currentProfile.userPicks?.images?.[0] } 
+                            currentProfile.userPicks?.images?.[0]  ? { uri: currentProfile.userPicks?.images?.[0] }
                             : require('../assets/Pfp.png')
                         }
                         style={globalStyles.profileImage}
