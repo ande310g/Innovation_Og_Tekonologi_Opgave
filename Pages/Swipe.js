@@ -1,39 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
-import { ref, onValue, set } from 'firebase/database';
+import { ref, onValue, set, get } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
 import { globalStyles } from './Styles';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Swipe = ({ navigation }) => {
     const [profiles, setProfiles] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [userId, setUserId] = useState(auth.currentUser.uid);
+    const userId = auth.currentUser.uid;
+
+    const [filters, setFilters] = useState(null);
 
     useEffect(() => {
-        const fetchProfiles = async () => {
+        const fetchFiltersAndProfiles = async () => {
             const usersRef = ref(database, 'users');
+            const listingsRef = ref(database, `listings/${userId}`);
             const swipesRef = ref(database, `swipes/${userId}`);
 
-            onValue(usersRef, (snapshot) => {
-                const users = snapshot.val() || {};
-                const availableProfiles = Object.keys(users)
-                    .filter(uid => uid !== userId && !users[uid].hasPlace)
-                    .map(uid => ({ uid, ...users[uid] }));
+            try {
+                // Fetch the current user's listing details
+                const currentListingSnapshot = await get(listingsRef);
+                const currentListingDetails = currentListingSnapshot.exists()
+                    ? Object.values(currentListingSnapshot.val())[0] // Extract the first listing
+                    : null;
 
-                // Fetch swiped users
-                onValue(swipesRef, (swipeSnapshot) => {
-                    const swipedUsers = swipeSnapshot.val() || {};
-                    const filteredProfiles = availableProfiles.filter(
-                        profile => !swipedUsers[profile.uid] // Exclude swiped profiles
-                    );
+                console.log('Current user listing details:', currentListingDetails);
 
-                    setProfiles(filteredProfiles);
-                }, { onlyOnce: true });
-            });
+                if (!currentListingDetails) {
+                    console.error('No listing details found for current user.');
+                    return;
+                }
+
+                // Fetch all profiles
+                onValue(usersRef, snapshot => {
+                    const users = snapshot.val() || {};
+                    const availableProfiles = Object.keys(users)
+                        .filter(uid => uid !== userId && !users[uid].hasPlace)
+                        .map(uid => ({ uid, ...users[uid] }));
+
+                    // Fetch swiped users
+                    onValue(swipesRef, swipeSnapshot => {
+                        const swipedUsers = swipeSnapshot.val() || {};
+
+                        const filteredProfiles = availableProfiles
+                            .filter(profile => !swipedUsers[profile.uid]) // Exclude swiped profiles
+                            .filter(profile => applyFilters(profile, currentListingDetails)); // Compare filters
+
+                        setProfiles(filteredProfiles);
+                    }, { onlyOnce: true });
+                });
+            } catch (error) {
+                console.error('Error fetching profiles or listings:', error);
+            }
         };
 
-        fetchProfiles();
+
+        fetchFiltersAndProfiles();
     }, [userId]);
+
+
+    const applyFilters = (profile, currentListingDetails) => {
+        const { filters } = profile;
+
+        console.log('Profile being checked:', profile.uid);
+        console.log('Profile filters:', filters);
+        console.log('Current user listing details:', currentListingDetails);
+
+        if (!filters) {
+            console.log('No filters for this profile, passing through.');
+            return true; // Allow profiles without filters
+        }
+
+        const { rent, size, areas } = filters;
+
+        const withinRent = rent
+            ? currentListingDetails.price >= rent.min && currentListingDetails.price <= rent.max
+            : true;
+
+        const withinSize = size
+            ? currentListingDetails.size >= size.min && currentListingDetails.size <= size.max
+            : true;
+
+        const withinArea = areas?.length
+            ? areas.includes(currentListingDetails.city)
+            : true;
+
+        console.log('withinRent:', withinRent);
+        console.log('withinSize:', withinSize);
+        console.log('withinArea:', withinArea);
+
+        const isMatch = withinRent && withinSize && withinArea;
+        console.log('Match result for profile:', profile.uid, '=>', isMatch);
+
+        return isMatch;
+    };
 
 
     const handleSwipeRight = async () => {
@@ -66,11 +127,11 @@ const Swipe = ({ navigation }) => {
 
             const currentUserMatchData = {
                 name: swipedUser.name,
-                role: 'seeker', // or "provider" based on the user swiping
+                role: swipedUser.hasPlace ? 'seeker' : 'provider',
             };
             const swipedUserMatchData = {
                 name: currentUserName,
-                role: 'provider', // or "seeker" depending on the swiped user's role
+                role: !swipedUser.hasPlace ? 'seeker' : 'provider',
             };
 
             await set(currentUserMatchesRef, currentUserMatchData);
@@ -85,72 +146,79 @@ const Swipe = ({ navigation }) => {
         setCurrentIndex((prevIndex) => prevIndex + 1);
     };
 
-
-
-
-
     const handleSwipeLeft = async () => {
         const swipedUser = profiles[currentIndex];
         if (!swipedUser) return;
 
         try {
-            const currentUserUid = auth.currentUser.uid;
-
-            // Save the swipe in the "swipes" node
-            const swipeRef = ref(database, `swipes/${currentUserUid}/${swipedUser.uid}`);
-            await set(swipeRef, { matched: false }); // Mark as not matched
+            const swipeRef = ref(database, `swipes/${userId}/${swipedUser.uid}`);
+            await set(swipeRef, { matched: false });
         } catch (error) {
             console.error('Error handling swipe left:', error);
         }
 
-        // Move to the next profile
-        setCurrentIndex((prevIndex) => prevIndex + 1);
+        setCurrentIndex(prevIndex => prevIndex + 1);
     };
-
 
     if (currentIndex >= profiles.length) {
         return (
-            <View style={globalStyles.container}>
-                <Text style={globalStyles.title}>No more profiles</Text>
-            </View>
+            <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
+                {/* Back Button and Logo */}
+                <View style={globalStyles.container}>
+                    <View style={globalStyles.backAndLogoContainer}>
+                        <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+                            <Text style={globalStyles.backButton}> ← Tilbage</Text>
+                        </TouchableOpacity>
+                        <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+                    </View>
+
+                    {/* No More Profiles Message */}
+                    <View style={[globalStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                        <Text style={globalStyles.title}>No more profiles</Text>
+                    </View>
+                </View>
+            </SafeAreaView>
         );
     }
 
+
+
     const currentProfile = profiles[currentIndex];
 
+
     return (
-        <SafeAreaView style={globalStyles.container}>
-        <View style={globalStyles.container}>
-            <View style={globalStyles.backAndLogoContainer}>
-          <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
-            <Text style={globalStyles.backButton}> ← Tilbage</Text>
-          </TouchableOpacity>
-          <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
-        </View>
-            <View style={globalStyles.profileContainer}>
-                {currentProfile ? (
-                    <>
-                        {/* Button in the top-right corner to navigate to UserDetail */}
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
+            <View style={globalStyles.container}>
+                {/* Back Button and Logo */}
+                <View style={globalStyles.backAndLogoContainer}>
+                    <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+                        <Text style={globalStyles.backButton}> ← Tilbage</Text>
+                    </TouchableOpacity>
+                    <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+                </View>
+
+                {/* Profile or Fallback UI */}
+                {currentIndex < profiles.length ? (
+                    // Display the current profile
+                    <View style={globalStyles.profileContainer}>
                         <TouchableOpacity
                             style={globalStyles.topRightButton}
-                            onPress={() => navigation.navigate('UserDetail', { userId: currentProfile.uid })}
+                            onPress={() => navigation.navigate('UserDetail', { userId: profiles[currentIndex]?.uid })}
                         >
                             <Text style={globalStyles.buttonText}>View Profile</Text>
                         </TouchableOpacity>
-
                         <Image
                             source={
-                                currentProfile.userPicks?.images?.[0]
-                                    ? { uri: currentProfile.userPicks?.images?.[0] }
+                                profiles[currentIndex]?.userPicks?.images?.[0]
+                                    ? { uri: profiles[currentIndex].userPicks.images[0] }
                                     : require('../assets/Pfp.png')
                             }
                             style={globalStyles.profileImage}
                         />
                         <Text style={globalStyles.name}>
-                            {currentProfile.name}, {new Date().getFullYear() - new Date(currentProfile.dob).getFullYear()}
+                            {profiles[currentIndex]?.name}, {new Date().getFullYear() - new Date(profiles[currentIndex]?.dob).getFullYear()}
                         </Text>
-                        <Text style={globalStyles.about}>{currentProfile.aboutMe}</Text>
-
+                        <Text style={globalStyles.about}>{profiles[currentIndex]?.aboutMe}</Text>
                         <View style={globalStyles.actions}>
                             <TouchableOpacity onPress={handleSwipeLeft} style={globalStyles.noButton}>
                                 <Text style={globalStyles.buttonText}>Nej tak</Text>
@@ -159,16 +227,18 @@ const Swipe = ({ navigation }) => {
                                 <Text style={globalStyles.buttonText}>Match!</Text>
                             </TouchableOpacity>
                         </View>
-                    </>
+                    </View>
                 ) : (
-                    <Text>No profiles found</Text>
+                    // Fallback for no profiles
+                    <View style={globalStyles.container}>
+                        <Text style={globalStyles.title}>No more profiles</Text>
+                    </View>
                 )}
             </View>
-
-        </View>
         </SafeAreaView>
     );
-};
 
+
+};
 
 export default Swipe;

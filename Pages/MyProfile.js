@@ -10,13 +10,22 @@ const MyProfile = ({ navigation }) => {
     const [userData, setUserData] = useState({});
     const [profileImage, setProfileImage] = useState(null);
     const [menuVisible, setMenuVisible] = useState(false);
+    const [hasListing, setHasListing] = useState(false); // Track if the user has a listing
 
     useEffect(() => {
         const userRef = ref(database, `users/${auth.currentUser.uid}`);
+        const listingsRef = ref(database, `listings/${auth.currentUser.uid}`);
+
+        // Fetch user data
         onValue(userRef, (snapshot) => {
             const data = snapshot.val();
             setUserData(data);
             setProfileImage(data?.userPicks?.images?.[0] || null); // Get the first image if available
+        });
+
+        // Check if the user has a listing
+        onValue(listingsRef, (snapshot) => {
+            setHasListing(snapshot.exists());
         });
     }, []);
 
@@ -54,7 +63,6 @@ const MyProfile = ({ navigation }) => {
                     <MenuItem onPress={() => { setMenuVisible(false); navigation.navigate('PhotoManager'); }}>
                         Manage Pictures
                     </MenuItem>
-                    {/* New menu item for users without a place */}
                     {!userData.hasPlace && (
                         <MenuItem onPress={() => { setMenuVisible(false); navigation.navigate('FilterPage'); }}>
                             Find a Place
@@ -69,7 +77,7 @@ const MyProfile = ({ navigation }) => {
                         <Image source={{ uri: profileImage }} style={styles.profileImage} />
                     ) : (
                         <Image
-                            source={require('../assets/Logo.png')} // Replace with your placeholder image
+                            source={require('../assets/Logo.png')}
                             style={styles.profileImage}
                         />
                     )}
@@ -89,6 +97,16 @@ const MyProfile = ({ navigation }) => {
                 )}
                 <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('Matches')}>
                     <Text style={globalStyles.buttonText}>Se dine matches</Text>
+                </TouchableOpacity>
+
+                {/* Conditionally render the button */}
+                <TouchableOpacity
+                    style={globalStyles.button}
+                    onPress={() => navigation.navigate(hasListing ? 'MyListing' : 'CreateListing')}
+                >
+                    <Text style={globalStyles.buttonText}>
+                        {hasListing ? 'Se lejemål' : 'Opret lejemål'}
+                    </Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

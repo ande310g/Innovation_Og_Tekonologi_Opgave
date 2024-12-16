@@ -20,29 +20,36 @@ const CreateListing = ({ navigation }) => {
 
   const handleSubmit = async () => {
     if (title && description && size && price && address && zipcode && city) {
+      const validAreas = ['City Center', 'Nørrebro', 'Østerbro', 'Vesterbro', 'Amager', 'Frederiksberg'];
+
+      // Validate that 'city' matches one of the filterable areas
+      if (!validAreas.includes(city)) {
+        alert(`Invalid area. Please select a city from: ${validAreas.join(', ')}`);
+        return;
+      }
+
       const auth = getAuth();
       const user = auth.currentUser;
 
       if (user) {
         const db = getDatabase();
-        const listingsRef = ref(db, `listings/${user.uid}`); // Include the user UID in the path
+        const listingsRef = ref(db, `listings/${user.uid}`);
         const newListingRef = push(listingsRef);
         const listing = {
           title,
           description,
-          size,
-          price,
-          deposit,
+          size: parseInt(size), // Ensure numeric values for filtering
+          price: parseInt(price),
+          deposit: parseInt(deposit),
           address,
           zipcode,
           city,
           images,
-          createdAt: new Date().toISOString(), 
-          userId: user.uid, // Store the user ID with the listing
+          createdAt: new Date().toISOString(),
+          userId: user.uid,
         };
 
         await set(newListingRef, listing);
-        await saveToLocalStorage(listing);
         navigation.navigate('MyListing');
       } else {
         alert("User not logged in");
@@ -51,6 +58,7 @@ const CreateListing = ({ navigation }) => {
       alert("Please fill out all fields");
     }
   };
+
 
 
 
