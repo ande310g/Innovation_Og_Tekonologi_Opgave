@@ -10,15 +10,31 @@ const Swipe = ({ navigation }) => {
     const [userId, setUserId] = useState(auth.currentUser.uid);
 
     useEffect(() => {
-        const usersRef = ref(database, 'users');
-        onValue(usersRef, (snapshot) => {
-            const users = snapshot.val();
-            const availableProfiles = Object.keys(users || {})
-                .filter(uid => uid !== userId && !users[uid].hasPlace) // Only users looking for rooms
-                .map(uid => ({ uid, ...users[uid] }));
-            setProfiles(availableProfiles);
-        });
+        const fetchProfiles = async () => {
+            const usersRef = ref(database, 'users');
+            const swipesRef = ref(database, `swipes/${userId}`);
+
+            onValue(usersRef, (snapshot) => {
+                const users = snapshot.val() || {};
+                const availableProfiles = Object.keys(users)
+                    .filter(uid => uid !== userId && !users[uid].hasPlace)
+                    .map(uid => ({ uid, ...users[uid] }));
+
+                // Fetch swiped users
+                onValue(swipesRef, (swipeSnapshot) => {
+                    const swipedUsers = swipeSnapshot.val() || {};
+                    const filteredProfiles = availableProfiles.filter(
+                        profile => !swipedUsers[profile.uid] // Exclude swiped profiles
+                    );
+
+                    setProfiles(filteredProfiles);
+                }, { onlyOnce: true });
+            });
+        };
+
+        fetchProfiles();
     }, [userId]);
+
 
     const handleSwipeRight = async () => {
         const swipedUser = profiles[currentIndex];
@@ -31,26 +47,32 @@ const Swipe = ({ navigation }) => {
             const currentUserRef = ref(database, `users/${currentUserUid}`);
             let currentUserName = '';
 
-            await onValue(currentUserRef, (snapshot) => {
-                const userData = snapshot.val();
-                currentUserName = userData?.name || 'Unknown';
-            }, { onlyOnce: true });
+            await onValue(
+                currentUserRef,
+                (snapshot) => {
+                    const userData = snapshot.val();
+                    currentUserName = userData?.name || 'Unknown';
+                },
+                { onlyOnce: true }
+            );
 
-            // Reference paths for both users
+            // Save the swipe in the "swipes" node
+            const swipeRef = ref(database, `swipes/${currentUserUid}/${swipedUser.uid}`);
+            await set(swipeRef, { matched: true }); // Mark as matched
+
+            // Save the match for both users
             const currentUserMatchesRef = ref(database, `matches/${currentUserUid}/${swipedUser.uid}`);
             const swipedUserMatchesRef = ref(database, `matches/${swipedUser.uid}/${currentUserUid}`);
 
-            // Data to save for each user
             const currentUserMatchData = {
                 name: swipedUser.name,
-                role: "seeker", // or "provider" based on the user swiping
+                role: 'seeker', // or "provider" based on the user swiping
             };
             const swipedUserMatchData = {
                 name: currentUserName,
-                role: "provider", // or "seeker" depending on the swiped user's role
+                role: 'provider', // or "seeker" depending on the swiped user's role
             };
 
-            // Save match for both users
             await set(currentUserMatchesRef, currentUserMatchData);
             await set(swipedUserMatchesRef, swipedUserMatchData);
 
@@ -66,9 +88,25 @@ const Swipe = ({ navigation }) => {
 
 
 
-    const handleSwipeLeft = () => {
+
+    const handleSwipeLeft = async () => {
+        const swipedUser = profiles[currentIndex];
+        if (!swipedUser) return;
+
+        try {
+            const currentUserUid = auth.currentUser.uid;
+
+            // Save the swipe in the "swipes" node
+            const swipeRef = ref(database, `swipes/${currentUserUid}/${swipedUser.uid}`);
+            await set(swipeRef, { matched: false }); // Mark as not matched
+        } catch (error) {
+            console.error('Error handling swipe left:', error);
+        }
+
+        // Move to the next profile
         setCurrentIndex((prevIndex) => prevIndex + 1);
     };
+
 
     if (currentIndex >= profiles.length) {
         return (
