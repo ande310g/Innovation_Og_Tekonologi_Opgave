@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ref, onValue } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
 import { globalStyles } from './Styles';
@@ -10,7 +10,6 @@ const MyProfile = ({ navigation }) => {
     const [userData, setUserData] = useState({});
     const [profileImage, setProfileImage] = useState(null);
     const [menuVisible, setMenuVisible] = useState(false);
-    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         const userRef = ref(database, `users/${auth.currentUser.uid}`);
@@ -55,43 +54,44 @@ const MyProfile = ({ navigation }) => {
                     <MenuItem onPress={() => { setMenuVisible(false); navigation.navigate('PhotoManager'); }}>
                         Manage Pictures
                     </MenuItem>
+                    {/* New menu item for users without a place */}
+                    {!userData.hasPlace && (
+                        <MenuItem onPress={() => { setMenuVisible(false); navigation.navigate('FilterPage'); }}>
+                            Find a Place
+                        </MenuItem>
+                    )}
                 </Menu>
             </View>
 
-
             <View style={[globalStyles.container, styles.profileContainer]}>
-                    {/* Profile Picture */}
-                    <View style={styles.imageWrapper}>
-                        {profileImage ? (
-                            <Image source={{ uri: profileImage }} style={styles.profileImage} />
-                        ) : (
-                            <Image
-                                source={require('../assets/Logo.png')} // Replace with your placeholder image
-                                style={styles.profileImage}
-                            />
-                        )}
-                    </View>
-
-                    {/* User Information */}
-                    <Text style={styles.nameText}>
-                        {`${userData.name || 'Navn ikke angivet'}, ${
-                            userData.dob ? new Date(userData.dob).getFullYear() : 'Alder ikke angivet'
-                        }`}
-                    </Text>
-                    <Text style={styles.aboutMe}>{userData.aboutMe || 'Ingen beskrivelse tilføjet.'}</Text>
-
-                    {/* Buttons */}
-                    {userData.hasPlace && (
-                        <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('Swipe')}>
-                            <Text style={globalStyles.buttonText}>Find din nye roomie</Text>
-                        </TouchableOpacity>
+                <View style={styles.imageWrapper}>
+                    {profileImage ? (
+                        <Image source={{ uri: profileImage }} style={styles.profileImage} />
+                    ) : (
+                        <Image
+                            source={require('../assets/Logo.png')} // Replace with your placeholder image
+                            style={styles.profileImage}
+                        />
                     )}
-                    <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('Matches')}>
-                        <Text style={globalStyles.buttonText}>Se dine matches</Text>
-                    </TouchableOpacity>
                 </View>
-            </SafeAreaView>
 
+                <Text style={styles.nameText}>
+                    {`${userData.name || 'Navn ikke angivet'}, ${
+                        userData.dob ? new Date(userData.dob).getFullYear() : 'Alder ikke angivet'
+                    }`}
+                </Text>
+                <Text style={styles.aboutMe}>{userData.aboutMe || 'Ingen beskrivelse tilføjet.'}</Text>
+
+                {userData.hasPlace && (
+                    <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('Swipe')}>
+                        <Text style={globalStyles.buttonText}>Find din nye roomie</Text>
+                    </TouchableOpacity>
+                )}
+                <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('Matches')}>
+                    <Text style={globalStyles.buttonText}>Se dine matches</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
     );
 };
 

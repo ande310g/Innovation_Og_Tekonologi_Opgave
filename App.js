@@ -20,6 +20,7 @@ import Chat from "./Pages/Chat";
 import Matches from "./Pages/Matches";
 import UserDetail from "./Pages/UserDetail";
 import PhotoManager from "./Pages/PhotoManager";
+import FilterPage from "./Pages/FilterPage";
 
 
 const Stack  = createStackNavigator();
@@ -52,6 +53,7 @@ const App = () => {
         <Stack.Screen name='Chat' component={Chat}/>
         <Stack.Screen name='UserDetail' component={UserDetail}/>
         <Stack.Screen name='PhotoManager' component={PhotoManager}/>
+        <Stack.Screen name='FilterPage' component={FilterPage}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
