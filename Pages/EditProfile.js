@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import {View, TextInput, Text, TouchableOpacity, Alert, ScrollView, Image, SafeAreaView} from 'react-native';
 import { ref, update, onValue } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
 import { globalStyles } from './Styles';
@@ -46,7 +46,14 @@ const EditProfile = ({ navigation }) => {
     };
 
     return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
         <ScrollView contentContainerStyle={globalStyles.container}>
+            <View style={globalStyles.backAndLogoContainer}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={globalStyles.backButton}>
+                    <Text style={globalStyles.backButton}>← Tilbage</Text>
+                </TouchableOpacity>
+                <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+            </View>
             <Text style={globalStyles.label}>Name</Text>
             <TextInput
                 style={globalStyles.input}
@@ -88,6 +95,7 @@ const EditProfile = ({ navigation }) => {
                 <Text style={globalStyles.buttonText}>Save</Text>
             </TouchableOpacity>
         </ScrollView>
+        </SafeAreaView>
     );
 };
 

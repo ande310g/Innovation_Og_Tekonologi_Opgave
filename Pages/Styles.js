@@ -91,6 +91,26 @@ export const globalStyles = StyleSheet.create({
         borderBottomWidth: 1,
         zIndex: 1000, // Ensure it stays above other components
     },
+    backAndLogoContainerMyProfile: {
+        paddingTop: Platform.OS === 'ios' ? 10 : 10, // Adjust for iOS notch or Android status bar
+        height: 67, // Increased to allow space for logo/buttons
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        backgroundColor: '#ffffff',
+        borderBottomColor: '#0097B2',
+        borderBottomWidth: 1,
+        zIndex: 1000,
+    },
+    menuButton: {
+        padding: 10,
+        marginRight: 10,
+    },
+    menuText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
     title: {    
         fontSize: 24,
         fontWeight: '600',
