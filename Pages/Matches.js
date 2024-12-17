@@ -18,34 +18,17 @@ const Matches = ({ navigation }) => {
                         ...data[matchId],
                     }));
 
-                    // Fetch profile pictures and DOB for matches
+                    // Fetch profile pictures for matches
                     const enrichedMatches = await Promise.all(
                         matchEntries.map(async (match) => {
-                            const userRef = ref(database, `users/${match.id}`);
-                            const userSnapshot = await get(userRef);
+                            const userRef = ref(database, `users/${match.id}/userPicks/images`);
+                            const imageSnapshot = await get(userRef);
 
-                            let profilePicture = null;
-                            let age = null;
+                            const profilePicture = imageSnapshot.exists()
+                                ? imageSnapshot.val()[0] // Get the first image if exists
+                                : null;
 
-                            if (userSnapshot.exists()) {
-                                const userData = userSnapshot.val();
-                                profilePicture = userData?.userPicks?.images?.[0] || null; // Get the first image if exists
-
-                                // Calculate age from DOB
-                                if (userData.dob) {
-                                    const dob = new Date(userData.dob);
-                                    const today = new Date();
-                                    age = today.getFullYear() - dob.getFullYear();
-                                    if (
-                                        today.getMonth() < dob.getMonth() ||
-                                        (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())
-                                    ) {
-                                        age -= 1; // Adjust if the birthday hasn't occurred yet this year
-                                    }
-                                }
-                            }
-
-                            return { ...match, profilePicture, age };
+                            return { ...match, profilePicture };
                         })
                     );
 
@@ -97,9 +80,7 @@ const Matches = ({ navigation }) => {
 
                                         {/* Match Details */}
                                         <View style={styles.matchDetails}>
-                                            <Text style={globalStyles.listTitle}>
-                                                {item.name}, {item.age ? `${item.age} ` : "Alder ikke angivet"}
-                                            </Text>
+                                            <Text style={globalStyles.listTitle}>{item.name}</Text>
                                             <TouchableOpacity
                                                 style={styles.zoomButton}
                                                 onPress={() => navigation.navigate('UserDetail', { userId: item.id })}
@@ -124,16 +105,16 @@ const styles = StyleSheet.create({
     },
     matchItem: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'center', // Align items vertically in the center
     },
     profileImage: {
         width: 60,
         height: 60,
-        borderRadius: 30,
-        marginRight: 10,
+        borderRadius: 30, // Circular image
+        marginRight: 10, // Space between the image and text
     },
     matchDetails: {
-        flex: 1,
+        flex: 1, // Allow the text container to take remaining space
         justifyContent: 'center',
     },
     zoomButton: {
