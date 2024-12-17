@@ -147,7 +147,7 @@ const MyListing = ({ navigation }) => {
         <View style={globalStyles.container}>
           {/* Header med tilbage-knap og logo */}
           <View style={globalStyles.backAndLogoContainer}>
-            <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+            <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.navigate('MyProfile')}>
               <Text style={globalStyles.backButton}> ← Tilbage</Text>
             </TouchableOpacity>
             <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
