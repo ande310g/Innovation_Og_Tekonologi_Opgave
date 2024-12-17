@@ -116,11 +116,11 @@ const UserDetail = ({ route, navigation }) => {
                     }`}
                 </Text>
                 <TouchableOpacity onPress={handleDeleteMatch} style={styles.deleteButton}>
-                    <Text style={styles.deleteButtonText}>Delete Match</Text>
+                    <Text style={styles.deleteButtonText}>Slet Match</Text>
                 </TouchableOpacity>
             </View>
 
-                <Text style={globalStyles.label}>About Me</Text>
+                <Text style={globalStyles.label}>Om mig</Text>
                 <Text style={globalStyles.text}>{userDetails.aboutMe}</Text>
 
                 {/* Listings Section */}
@@ -161,7 +161,7 @@ const UserDetail = ({ route, navigation }) => {
                 )}
 
                 {/* Gallery Section */}
-                <Text style={globalStyles.label}>Gallery</Text>
+                <Text style={globalStyles.label}>Billeder</Text>
                 <FlatList
                     data={userDetails.userPicks?.images || []}
                     keyExtractor={(item, index) => `${item}_${index}`}

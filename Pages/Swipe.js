@@ -205,7 +205,7 @@ const Swipe = ({ navigation }) => {
                             style={globalStyles.topRightButton}
                             onPress={() => navigation.navigate('UserDetail', { userId: profiles[currentIndex]?.uid })}
                         >
-                            <Text style={globalStyles.buttonText}>View Profile</Text>
+                            <Text style={globalStyles.buttonText}>Se Profil</Text>
                         </TouchableOpacity>
                         <Image
                             source={

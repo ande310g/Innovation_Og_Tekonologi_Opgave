@@ -143,10 +143,10 @@ const PhotoManager = ({ navigation }) => {
                           </TouchableOpacity>
                           <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
                         </View>
-                <Text style={globalStyles.title}>Manage Your Profile Photos</Text>
+                <Text style={globalStyles.title}>Rediger billeder på din profil</Text>
 
                 <TouchableOpacity onPress={pickImage} style={globalStyles.button}>
-                    <Text style={globalStyles.buttonText}>Add New Photos</Text>
+                    <Text style={globalStyles.buttonText}>Tilføj billeder</Text>
                 </TouchableOpacity>
 
                 <FlatList
@@ -196,7 +196,7 @@ const PhotoManager = ({ navigation }) => {
                         onPress={handleSaveData}
                         disabled={uploading}
                     >
-                        <Text style={globalStyles.buttonText}>{uploading ? "Uploading..." : "Save Changes"}</Text>
+                        <Text style={globalStyles.buttonText}>{uploading ? "Oploader..." : "Gem Ændringer"}</Text>
                     </TouchableOpacity>
                 )}
             </View>

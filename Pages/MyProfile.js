@@ -58,10 +58,10 @@ const MyProfile = ({ navigation }) => {
                     onRequestClose={toggleMenu}
                 >
                     <MenuItem onPress={() => { setMenuVisible(false); navigation.navigate('EditProfile'); }}>
-                        Edit Profile
+                        Rediger profil
                     </MenuItem>
                     <MenuItem onPress={() => { setMenuVisible(false); navigation.navigate('PhotoManager'); }}>
-                        Manage Pictures
+                        Rediger billeder
                     </MenuItem>
                 </Menu>
             </View>

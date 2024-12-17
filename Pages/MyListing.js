@@ -102,7 +102,7 @@ const MyListing = ({ navigation }) => {
         <Text style={globalStyles.listDescription} numberOfLines={2}>
           {item.description}
         </Text>
-        <Text style={globalStyles.listDetails}>{`Størrelse: ${item.size} m2`}</Text>
+        <Text style={globalStyles.listDetails}>{`Størrelse: ${item.size} m²`}</Text>
         <Text style={globalStyles.listDetails}>{`Pris: ${item.price} ,-`}</Text>
         <View style={{ flexDirection: 'row', marginTop: 10 }}>
           <TouchableOpacity
