@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     Image,
     SafeAreaView,
+    KeyboardAvoidingView
 } from 'react-native';
 import { ref, onValue, push } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
@@ -52,6 +53,7 @@ const Chat = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={globalStyles.container}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
             <View style={globalStyles.container}>
                 <View style={globalStyles.backAndLogoContainer}>
                     <TouchableOpacity
@@ -106,6 +108,7 @@ const Chat = ({ route, navigation }) => {
                     </View>
                 </View>
             </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };

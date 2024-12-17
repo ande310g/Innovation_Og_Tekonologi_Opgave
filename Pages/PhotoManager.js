@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Alert, Image, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert, Image, Platform, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
@@ -134,8 +134,15 @@ const PhotoManager = ({ navigation }) => {
     };
 
     return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
         <DismissKeyboardWrapper>
             <View style={globalStyles.container}>
+                 <View style={globalStyles.backAndLogoContainer}>
+                          <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+                            <Text style={globalStyles.backButton}> ← Tilbage</Text>
+                          </TouchableOpacity>
+                          <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+                        </View>
                 <Text style={globalStyles.title}>Manage Your Profile Photos</Text>
 
                 <TouchableOpacity onPress={pickImage} style={globalStyles.button}>
@@ -194,6 +201,7 @@ const PhotoManager = ({ navigation }) => {
                 )}
             </View>
         </DismissKeyboardWrapper>
+        </SafeAreaView>
     );
 };
 

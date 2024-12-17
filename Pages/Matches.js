@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, SafeAreaView } from 'react-native';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, get } from 'firebase/database';
 import { auth, database } from '../Component/firebase';
 import { globalStyles } from './Styles';
 
@@ -8,26 +8,56 @@ const Matches = ({ navigation }) => {
     const [matches, setMatches] = useState([]);
 
     useEffect(() => {
-        const matchesRef = ref(database, `matches/${auth.currentUser.uid}`);
-        const unsubscribe = onValue(matchesRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                const matchList = Object.keys(data).map((matchId) => ({
-                    id: matchId,
-                    ...data[matchId],
-                }));
-                setMatches(matchList);
-            } else {
-                setMatches([]);
-            }
-        });
+        const fetchMatches = async () => {
+            const matchesRef = ref(database, `matches/${auth.currentUser.uid}`);
+            onValue(matchesRef, async (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const matchEntries = Object.keys(data).map((matchId) => ({
+                        id: matchId,
+                        ...data[matchId],
+                    }));
 
-        return () => unsubscribe(); // Cleanup on unmount
+                    // Fetch profile pictures and DOB for matches
+                    const enrichedMatches = await Promise.all(
+                        matchEntries.map(async (match) => {
+                            const userRef = ref(database, `users/${match.id}`);
+                            const userSnapshot = await get(userRef);
+
+                            let profilePicture = null;
+                            let age = null;
+
+                            if (userSnapshot.exists()) {
+                                const userData = userSnapshot.val();
+                                profilePicture = userData?.userPicks?.images?.[0] || null; // Get the first image if exists
+
+                                // Calculate age from DOB
+                                if (userData.dob) {
+                                    const dob = new Date(userData.dob);
+                                    const today = new Date();
+                                    age = today.getFullYear() - dob.getFullYear();
+                                    if (
+                                        today.getMonth() < dob.getMonth() ||
+                                        (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())
+                                    ) {
+                                        age -= 1; // Adjust if the birthday hasn't occurred yet this year
+                                    }
+                                }
+                            }
+
+                            return { ...match, profilePicture, age };
+                        })
+                    );
+
+                    setMatches(enrichedMatches);
+                } else {
+                    setMatches([]);
+                }
+            });
+        };
+
+        fetchMatches();
     }, []);
-
-    const handleChatOpen = (match) => {
-        navigation.navigate('Chat', { matchId: match.id, matchName: match.name });
-    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
@@ -51,15 +81,34 @@ const Matches = ({ navigation }) => {
                                     style={globalStyles.listItem}
                                     onPress={() => navigation.navigate('UserDetail', { userId: item.id })}
                                 >
-                                    <Text style={globalStyles.listTitle}>{item.name}</Text>
-                                    <TouchableOpacity
-                                        style={styles.zoomButton}
-                                        onPress={() => navigation.navigate('UserDetail', { userId: item.id })}
-                                    >
-                                        <Text style={globalStyles.zoomButtonText}>Zoom</Text>
-                                    </TouchableOpacity>
-                                </TouchableOpacity>
+                                    <View style={styles.matchItem}>
+                                        {/* Profile Picture */}
+                                        {item.profilePicture ? (
+                                            <Image
+                                                source={{ uri: item.profilePicture }}
+                                                style={styles.profileImage}
+                                            />
+                                        ) : (
+                                            <Image
+                                                source={require('../assets/Pfp.png')}
+                                                style={styles.profileImage}
+                                            />
+                                        )}
 
+                                        {/* Match Details */}
+                                        <View style={styles.matchDetails}>
+                                            <Text style={globalStyles.listTitle}>
+                                                {item.name}, {item.age ? `${item.age} ` : "Alder ikke angivet"}
+                                            </Text>
+                                            <TouchableOpacity
+                                                style={styles.zoomButton}
+                                                onPress={() => navigation.navigate('UserDetail', { userId: item.id })}
+                                            >
+                                                <Text style={globalStyles.zoomButtonText}>Zoom</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
                             )}
                         />
                     )}
@@ -73,13 +122,22 @@ const styles = StyleSheet.create({
     profileContainer: {
         flex: 1,
     },
-    listItem: globalStyles.listItem,
-    listTitle: globalStyles.listTitle,
-    noMatchesText: {
-        textAlign: 'center',
-        color: '#888',
-        marginTop: 20,
-        fontSize: 16,
+    matchItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    profileImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        marginRight: 10,
+    },
+    matchDetails: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    zoomButton: {
+        marginTop: 5,
     },
 });
 

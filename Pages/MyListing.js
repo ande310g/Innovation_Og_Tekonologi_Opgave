@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Alert, StyleSheet, KeyboardAvoidingView, ScrollView, SafeAreaView, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView, Image, StyleSheet } from 'react-native';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, onValue, remove } from 'firebase/database';
 import { globalStyles } from './Styles';
@@ -76,35 +76,51 @@ const MyListing = ({ navigation }) => {
 
   const handleEdit = (listingId) => {
     navigation.navigate('EditListing', { listingId });
-    };
+  };
 
-    const renderListing = ({ item }) => (
-        <TouchableOpacity
-          style={globalStyles.listItem}
-          onPress={() => navigation.navigate('DetailedListing', { listingId: item.id })}
-          activeOpacity={0.8}
-        >
-          <Text style={globalStyles.listTitle}>{item.title}</Text>
-          <Text style={globalStyles.listDescription}>{item.description}</Text>
-          <Text style={globalStyles.listDetails}>{`Størrelse: ${item.size} m2`}</Text>
-          <Text style={globalStyles.listDetails}>{`Pris: $${item.price} ,-`}</Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-            <TouchableOpacity
-              style={[globalStyles.button, {height: 40, width: 80}]}
-              onPress={() => handleEdit(item.id)}
-            >
-              <Text style={globalStyles.buttonText}>Rediger</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[globalStyles.button, {height: 40, width: 80}]}
-              onPress={() => handleDelete(item.id)}
-            >
-              <Text style={globalStyles.buttonText}>Slet</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      );
+  const renderListing = ({ item }) => (
+    <TouchableOpacity
+      style={styles.listItem}
+      onPress={() => navigation.navigate('DetailedListing', { 
+        listingId: item.id,
+        userId: getAuth().currentUser.uid, 
+       })}
+      activeOpacity={0.8}
+    >
+      {/* Thumbnail */}
+      {item.images && item.images.length > 0 ? (
+        <Image source={{ uri: item.images[0] }} style={styles.thumbnail} />
+      ) : (
+        <View style={styles.thumbnailPlaceholder}>
+          <Text style={{ color: '#ccc', fontSize: 12 }}>No Image</Text>
+        </View>
+      )}
 
+      {/* Listing Details */}
+      <View style={styles.listContent}>
+        <Text style={globalStyles.listTitle}>{item.title}</Text>
+        <Text style={globalStyles.listDescription} numberOfLines={2}>
+          {item.description}
+        </Text>
+        <Text style={globalStyles.listDetails}>{`Størrelse: ${item.size} m2`}</Text>
+        <Text style={globalStyles.listDetails}>{`Pris: ${item.price} ,-`}</Text>
+        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+          <TouchableOpacity
+            style={[globalStyles.button, { height: 40, width: 80, marginRight: 10 }]}
+            onPress={() => handleEdit(item.id)}
+          >
+            <Text style={globalStyles.buttonText}>Rediger</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[globalStyles.button, { height: 40, width: 80 }]}
+            onPress={() => handleDelete(item.id)}
+          >
+            <Text style={globalStyles.buttonText}>Slet</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
 
   if (loading) {
     return (
@@ -126,13 +142,11 @@ const MyListing = ({ navigation }) => {
         <Text style={globalStyles.title}>Mit Lejemål</Text>
         
         {listings.length > 0 ? (
-          <>
-            <FlatList
-              data={listings}
-              keyExtractor={(item) => item.id}
-              renderItem={renderListing}
-            />
-          </>
+          <FlatList
+            data={listings}
+            keyExtractor={(item) => item.id}
+            renderItem={renderListing}
+          />
         ) : (
           <Text style={globalStyles.title}>
             Du har endnu ikke oprettet en annonce for dit lejemål.
@@ -149,10 +163,37 @@ const MyListing = ({ navigation }) => {
       </View>
     </SafeAreaView>
   );
-  
 };
 
-
-
+const styles = StyleSheet.create({
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 10,
+    elevation: 2,
+  },
+  thumbnail: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  thumbnailPlaceholder: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    marginRight: 10,
+    backgroundColor: '#ddd',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  listContent: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
 
 export default MyListing;

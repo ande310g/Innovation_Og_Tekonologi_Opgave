@@ -387,7 +387,7 @@ export const globalStyles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 10,
-        backgroundColor: '#007bff', // Adjust as needed
+        backgroundColor: '#49ACD0', // Adjust as needed
         padding: 10,
         borderRadius: 5,
         zIndex: 10, // Ensures it stays on top

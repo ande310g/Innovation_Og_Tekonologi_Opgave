@@ -47,7 +47,7 @@ const MyProfile = ({ navigation }) => {
                 <TouchableOpacity onPress={handleLogout} style={globalStyles.backButton}>
                     <Text style={globalStyles.logoutText}>Log ud</Text>
                 </TouchableOpacity>
-                <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+                <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 56 }} />
                 <Menu
                     visible={menuVisible}
                     anchor={
@@ -63,11 +63,6 @@ const MyProfile = ({ navigation }) => {
                     <MenuItem onPress={() => { setMenuVisible(false); navigation.navigate('PhotoManager'); }}>
                         Manage Pictures
                     </MenuItem>
-                    {!userData.hasPlace && (
-                        <MenuItem onPress={() => { setMenuVisible(false); navigation.navigate('FilterPage'); }}>
-                            Find a Place
-                        </MenuItem>
-                    )}
                 </Menu>
             </View>
 
@@ -85,7 +80,12 @@ const MyProfile = ({ navigation }) => {
 
                 <Text style={styles.nameText}>
                     {`${userData.name || 'Navn ikke angivet'}, ${
-                        userData.dob ? new Date(userData.dob).getFullYear() : 'Alder ikke angivet'
+                        userData.dob
+                            ? `${new Date().getFullYear() - new Date(userData.dob).getFullYear() -
+                                (new Date().getMonth() < new Date(userData.dob).getMonth() ||
+                                (new Date().getMonth() === new Date(userData.dob).getMonth() &&
+                                new Date().getDate() < new Date(userData.dob).getDate()) ? 1 : 0)} år`
+                            : 'Alder ikke angivet'
                     }`}
                 </Text>
                 <Text style={styles.aboutMe}>{userData.aboutMe || 'Ingen beskrivelse tilføjet.'}</Text>
@@ -99,15 +99,28 @@ const MyProfile = ({ navigation }) => {
                     <Text style={globalStyles.buttonText}>Se dine matches</Text>
                 </TouchableOpacity>
 
-                {/* Conditionally render the button */}
-                <TouchableOpacity
-                    style={globalStyles.button}
-                    onPress={() => navigation.navigate(hasListing ? 'MyListing' : 'CreateListing')}
-                >
-                    <Text style={globalStyles.buttonText}>
-                        {hasListing ? 'Se lejemål' : 'Opret lejemål'}
-                    </Text>
-                </TouchableOpacity>
+                <View>
+                {/* Render "Se dine lejemål" if the user has a listing */}
+                {hasListing && (
+                    <TouchableOpacity
+                        style={globalStyles.button}
+                        onPress={() => navigation.navigate('MyListing')}
+                    >
+                        <Text style={globalStyles.buttonText}>Se dine lejemål</Text>
+                    </TouchableOpacity>
+                )}
+
+                {/* Render "Opsæt filtre" if the user does NOT have a listing */}
+                {!hasListing && (
+                    <TouchableOpacity
+                        style={globalStyles.button}
+                        onPress={() => navigation.navigate('FilterPage')}
+                    >
+                        <Text style={globalStyles.buttonText}>Opsæt filtre</Text>
+                    </TouchableOpacity>
+                )}
+            </View>
+                  
             </View>
         </SafeAreaView>
     );

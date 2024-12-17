@@ -6,6 +6,8 @@ import {
     FlatList,
     StyleSheet,
     Alert,
+    Image,
+    SafeAreaView
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Checkbox from 'expo-checkbox';
@@ -87,7 +89,14 @@ const FilterPage = ({ navigation }) => {
     };
 
     return (
+        <SafeAreaView style={globalStyles.container}>
         <View style={globalStyles.container}>
+            <View style={globalStyles.backAndLogoContainer}>
+                <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+                    <Text style={globalStyles.backButton}>← Tilbage</Text>
+                </TouchableOpacity>
+                <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+            </View>
             <Text style={globalStyles.title}>Filter Listings</Text>
 
             {/* Rent Filter */}
@@ -151,6 +160,7 @@ const FilterPage = ({ navigation }) => {
                 <Text style={globalStyles.buttonText}>Save Filters</Text>
             </TouchableOpacity>
         </View>
+        </SafeAreaView>
     );
 };
 

@@ -55,7 +55,6 @@ const ListingsPage = ({ navigation }) => {
       onPress={() => navigation.navigate('DetailedListing', { listingId: item.id })}
       activeOpacity={0.8}
     >
-    {/* Navigationen ovenfor virker ikke,jeg ved ikke hvorfor */}  
 
       <Text style={globalStyles.listTitle}>{item.title}</Text>
       <Text style={globalStyles.listDescription}>{item.description}</Text>
