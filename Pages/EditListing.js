@@ -171,7 +171,7 @@ const EditListing = ({ route, navigation }) => {
 
         {/* Image Section */}
         <TouchableOpacity style={globalStyles.button} onPress={pickImages}>
-          <Text style={globalStyles.buttonText}>Update Images</Text>
+          <Text style={globalStyles.buttonText}>Vælg flere billeder</Text>
         </TouchableOpacity>
 
         {/* Image Preview with Delete */}
@@ -200,7 +200,7 @@ const EditListing = ({ route, navigation }) => {
         />
 
         <TouchableOpacity style={globalStyles.button} onPress={handleSave}>
-          <Text style={globalStyles.buttonText}>Save Changes</Text>
+          <Text style={globalStyles.buttonText}>Gem ændringer</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -21,7 +21,7 @@ const CreateUser = ({ navigation }) => {
 
     const handleSignUp = () => {
         if (!name || !email || !password || !phoneNumber || !aboutMe) {
-            setError('All fields are required!');
+            setError('Alle felter skal udfyldes!');
             return;
         }
 

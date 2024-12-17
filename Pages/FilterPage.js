@@ -97,10 +97,10 @@ const FilterPage = ({ navigation }) => {
                 </TouchableOpacity>
                 <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
             </View>
-            <Text style={globalStyles.title}>Filter Listings</Text>
+            <Text style={globalStyles.title}>Filtrer på bolig</Text>
 
             {/* Rent Filter */}
-            <Text style={globalStyles.label}>Rent (DKK/month)</Text>
+            <Text style={globalStyles.label}>Husleje (DKK/måned)</Text>
             <Text style={globalStyles.text}>{`DKK ${minRent} - ${maxRent}`}</Text>
             <Slider
                 style={styles.slider}
@@ -120,7 +120,7 @@ const FilterPage = ({ navigation }) => {
             />
 
             {/* Size Filter */}
-            <Text style={globalStyles.label}>Size (m²)</Text>
+            <Text style={globalStyles.label}>Størrelse (m²)</Text>
             <Text style={globalStyles.text}>{`${minSize}m² - ${maxSize}m²`}</Text>
             <Slider
                 style={styles.slider}
@@ -140,7 +140,7 @@ const FilterPage = ({ navigation }) => {
             />
 
             {/* Area Filter */}
-            <Text style={globalStyles.label}>Areas of Copenhagen</Text>
+            <Text style={globalStyles.label}>Område</Text>
             <FlatList
                 data={copenhagenAreas}
                 keyExtractor={(item) => item}
@@ -149,7 +149,7 @@ const FilterPage = ({ navigation }) => {
                         <Checkbox
                             value={selectedAreas.includes(item)}
                             onValueChange={() => toggleArea(item)}
-                            style={{ marginRight: 10 }} // Optional: Add custom styling
+                            style={{ marginRight: 10 }} 
                         />
                         <Text style={globalStyles.text}>{item}</Text>
                     </View>
@@ -157,7 +157,7 @@ const FilterPage = ({ navigation }) => {
             />
 
             <TouchableOpacity style={globalStyles.button} onPress={saveFilters}>
-                <Text style={globalStyles.buttonText}>Save Filters</Text>
+                <Text style={globalStyles.buttonText}>Gem filtre</Text>
             </TouchableOpacity>
         </View>
         </SafeAreaView>

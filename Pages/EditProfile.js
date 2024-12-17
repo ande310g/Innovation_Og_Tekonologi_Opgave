@@ -37,11 +37,11 @@ const EditProfile = ({ navigation }) => {
             },
         })
             .then(() => {
-                Alert.alert('Success', 'Profile updated successfully!');
+                Alert.alert('Success', 'Profil opdateret!');
                 navigation.goBack();
             })
             .catch((error) => {
-                Alert.alert('Error', error.message);
+                Alert.alert('Fejl', error.message);
             });
     };
 
@@ -61,7 +61,7 @@ const EditProfile = ({ navigation }) => {
                 onChangeText={setName}
             />
 
-            <Text style={globalStyles.label}>About Me</Text>
+            <Text style={globalStyles.label}>Om Mig</Text>
             <TextInput
                 style={globalStyles.inputBio}
                 value={aboutMe}
@@ -69,7 +69,7 @@ const EditProfile = ({ navigation }) => {
                 multiline
             />
 
-            <Text style={globalStyles.label}>Phone Number</Text>
+            <Text style={globalStyles.label}>Telefonnummer</Text>
             <TextInput
                 style={globalStyles.input}
                 value={phoneNumber}
@@ -77,7 +77,7 @@ const EditProfile = ({ navigation }) => {
                 keyboardType="phone-pad"
             />
 
-            <Text style={globalStyles.label}>Hobbies</Text>
+            <Text style={globalStyles.label}>Hobbyer</Text>
             <TextInput
                 style={globalStyles.input}
                 value={hobbies}
@@ -92,7 +92,7 @@ const EditProfile = ({ navigation }) => {
             />
 
             <TouchableOpacity style={globalStyles.button} onPress={handleSave}>
-                <Text style={globalStyles.buttonText}>Save</Text>
+                <Text style={globalStyles.buttonText}>Gem</Text>
             </TouchableOpacity>
         </ScrollView>
         </SafeAreaView>

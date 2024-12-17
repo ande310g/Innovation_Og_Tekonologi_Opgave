@@ -157,7 +157,7 @@ const UserDetail = ({ route, navigation }) => {
                     style={styles.listingsFlatList} // Added max height
                 />
                 ) : (
-                    <Text style={globalStyles.text}>No listings found</Text>
+                    <Text style={globalStyles.text}>Ingen annoncer fundet</Text>
                 )}
 
                 {/* Gallery Section */}
@@ -180,7 +180,7 @@ const UserDetail = ({ route, navigation }) => {
                     style={styles.chatButton}
                     onPress={handleOpenChat}
                 >
-                    <Text style={styles.chatButtonText}>Open Chat</Text>
+                    <Text style={styles.chatButtonText}>Chat</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

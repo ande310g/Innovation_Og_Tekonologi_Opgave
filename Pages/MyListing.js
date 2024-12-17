@@ -32,7 +32,7 @@ const MyListing = ({ navigation }) => {
           }
         });
       } else {
-        Alert.alert("Error", "User not logged in");
+        Alert.alert("Error", "Bruger ikke logget ind");
         navigation.navigate("Login");
       }
     };

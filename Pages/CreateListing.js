@@ -169,7 +169,7 @@ const CreateListing = ({ navigation }) => {
 
             {/* Submit Button */}
             <TouchableOpacity style={globalStyles.button} onPress={handleSubmit} disabled={uploading}>
-              <Text style={globalStyles.buttonText}>{uploading ? "Uploading..." : "Opret opslag"}</Text>
+              <Text style={globalStyles.buttonText}>{uploading ? "Uploader..." : "Opret opslag"}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

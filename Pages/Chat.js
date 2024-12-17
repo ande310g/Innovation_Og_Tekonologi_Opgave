@@ -5,7 +5,6 @@ import {
     Button,
     FlatList,
     Text,
-    StyleSheet,
     TouchableOpacity,
     Image,
     SafeAreaView,

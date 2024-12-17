@@ -137,7 +137,7 @@ const Swipe = ({ navigation }) => {
             await set(currentUserMatchesRef, currentUserMatchData);
             await set(swipedUserMatchesRef, swipedUserMatchData);
 
-            Alert.alert('Match!', `You matched with ${swipedUser.name}.`);
+            Alert.alert('Match!', `Du matchede med ${swipedUser.name}.`);
         } catch (error) {
             console.error('Error saving match:', error);
         }
@@ -231,7 +231,7 @@ const Swipe = ({ navigation }) => {
                 ) : (
                     // Fallback for no profiles
                     <View style={globalStyles.container}>
-                        <Text style={globalStyles.title}>No more profiles</Text>
+                        <Text style={globalStyles.title}>Ikke flere profiler</Text>
                     </View>
                 )}
             </View>

@@ -59,11 +59,11 @@ const DetailedAboutYou = ({ navigation }) => {
                         </TouchableOpacity>
                         <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
                     </View>
-                    <Text style={globalStyles.title}>Fortæl os omkring dig selv</Text>
+                    <Text style={globalStyles.title}>Fortæl os lidt om dig selv</Text>
 
                     <Text style={globalStyles.label}>Erhverv</Text>
                     <TextInput
-                        placeholder="E.g., Software Developer, Student"
+                        placeholder="E.g., Softwareudvikler, Studerende"
                         value={profession}
                         onChangeText={setProfession}
                         style={globalStyles.input}
@@ -71,7 +71,7 @@ const DetailedAboutYou = ({ navigation }) => {
 
                     <Text style={globalStyles.label}>Hobbyer</Text>
                     <TextInput
-                        placeholder="E.g., Hiking, Cooking"
+                        placeholder="E.g., Madlavning, Løb, Gaming"
                         value={hobbies}
                         onChangeText={setHobbies}
                         style={globalStyles.inputBio}
@@ -95,7 +95,7 @@ const DetailedAboutYou = ({ navigation }) => {
                     </View>
                     <Text style={globalStyles.label}>Livstil</Text>
                     <TextInput
-                        placeholder="Describe your daily routine, habits, etc."
+                        placeholder="Beskriv din livstil, rutiner, vaner, etc."
                         value={aboutLifestyle}
                         onChangeText={setAboutLifestyle}
                         style={globalStyles.inputBio}
@@ -125,7 +125,7 @@ const DetailedAboutYou = ({ navigation }) => {
                     {error ? <Text style={globalStyles.errorText}>{error}</Text> : null}
 
                     <TouchableOpacity style={globalStyles.button} onPress={handleSaveDetails}>
-                        <Text style={globalStyles.buttonText}>Save Details</Text>
+                        <Text style={globalStyles.buttonText}>Gem</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

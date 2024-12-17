@@ -69,9 +69,9 @@ const Matches = ({ navigation }) => {
                     <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
                 </View>
                 <View style={globalStyles.container}>
-                    <Text style={globalStyles.title}>Your Matches</Text>
+                    <Text style={globalStyles.title}>Dine Matches</Text>
                     {matches.length === 0 ? (
-                        <Text style={globalStyles.noMatchesText}>No matches found</Text>
+                        <Text style={globalStyles.noMatchesText}>Ingen matches fundet</Text>
                     ) : (
                         <FlatList
                             data={matches}

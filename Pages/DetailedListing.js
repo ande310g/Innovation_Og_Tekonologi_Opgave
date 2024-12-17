@@ -28,11 +28,11 @@ const DetailedListing = ({ route, navigation }) => {
         if (snapshot.exists()) {
           setListing(snapshot.val());
         } else {
-          Alert.alert("Error", "Listing not found");
+          Alert.alert("Fejl", "Kunne ikke finde lejemålet");
           navigation.goBack();
         }
       } catch (error) {
-        Alert.alert("Error", "Could not fetch listing details");
+        Alert.alert("Fejl", "Kunne ikke hente annoncedetaljer");
       } finally {
         setLoading(false);
       }
@@ -52,7 +52,7 @@ const DetailedListing = ({ route, navigation }) => {
   if (!listing) {
     return (
       <View style={globalStyles.container}>
-        <Text style={globalStyles.title}>No Listing Found</Text>
+        <Text style={globalStyles.title}>Ingen lejemålsannonce fundet</Text>
       </View>
     );
   }
@@ -71,7 +71,7 @@ const DetailedListing = ({ route, navigation }) => {
         {/* Listing Details */}
         <Text style={globalStyles.title}>{listing.title}</Text>
         <Text style={styles.detailText}>Beskrivelse: {listing.description}</Text>
-        <Text style={styles.detailText}>Strørrelse: {listing.size} m2</Text>
+        <Text style={styles.detailText}>Strørrelse: {listing.size} m²</Text>
         <Text style={styles.detailText}>Månedlig husleje: ${listing.price} ,-</Text>
         <Text style={styles.detailText}>Depositum: ${listing.deposit} ,-</Text>
         <Text style={styles.detailText}>Adresse: {listing.address}</Text>
