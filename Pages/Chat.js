@@ -120,7 +120,8 @@ const Chat = ({ route, navigation }) => {
                                 value={newMessage} // Binder input til state
                                 onChangeText={setNewMessage} // Opdaterer state ved input
                             />
-                            <Button title="Send" onPress={sendMessage} /> {/* Sender besked */}
+                            {/* Sender besked */}
+                            <Button title="Send" onPress={sendMessage} />
                         </View>
                     </View>
                 </View>

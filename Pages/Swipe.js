@@ -132,8 +132,20 @@ const Swipe = ({ navigation }) => {
     // Viser besked, hvis der ikke er flere profiler
     if (currentIndex >= profiles.length) {
         return (
-            <SafeAreaView style={globalStyles.container}>
-                <Text style={globalStyles.title}>Ingen flere profiler</Text>
+            <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
+                {/* Back Button and Logo */}
+                <View style={globalStyles.container}>
+                    <View style={globalStyles.backAndLogoContainer}>
+                        <TouchableOpacity style={globalStyles.backButton} onPress={() => navigation.goBack()}>
+                            <Text style={globalStyles.backButton}> ← Tilbage</Text>
+                        </TouchableOpacity>
+                        <Image source={require('../assets/Logo.jpg')} style={{ width: 110, height: 60 }} />
+                    </View>
+                    {/* No More Profiles Message */}
+                    <View style={[globalStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                        <Text style={globalStyles.title}>Ingen profiler</Text>
+                    </View>
+                </View>
             </SafeAreaView>
         );
     }
