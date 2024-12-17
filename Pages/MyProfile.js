@@ -101,25 +101,34 @@ const MyProfile = ({ navigation }) => {
 
                 <View>
                 {/* Render "Se dine lejemål" if the user has a listing */}
-                {hasListing && (
-                    <TouchableOpacity
-                        style={globalStyles.button}
-                        onPress={() => navigation.navigate('MyListing')}
-                    >
-                        <Text style={globalStyles.buttonText}>Se dine lejemål</Text>
-                    </TouchableOpacity>
-                )}
+                    {/* Conditional button logic */}
+                    {userData.hasPlace ? (
+                        // If hasPlace is true, show MyListing/CreateListing button
+                        <TouchableOpacity
+                            style={globalStyles.button}
+                            onPress={() => {
+                                if (hasListing) {
+                                    navigation.navigate('MyListing'); // Navigate to MyListing if listing exists
+                                } else {
+                                    navigation.navigate('CreateListing'); // Navigate to CreateListing if no listing exists
+                                }
+                            }}
+                        >
+                            <Text style={globalStyles.buttonText}>
+                                {hasListing ? 'Se dit lejemål' : 'Opret dit lejemål'}
+                            </Text>
+                        </TouchableOpacity>
+                    ) : (
+                        // If hasPlace is false, show the Filters button
+                        <TouchableOpacity
+                            style={globalStyles.button}
+                            onPress={() => navigation.navigate('FilterPage')}
+                        >
+                            <Text style={globalStyles.buttonText}>Opsæt filtre</Text>
+                        </TouchableOpacity>
+                    )}
 
-                {/* Render "Opsæt filtre" if the user does NOT have a listing */}
-                {!hasListing && (
-                    <TouchableOpacity
-                        style={globalStyles.button}
-                        onPress={() => navigation.navigate('FilterPage')}
-                    >
-                        <Text style={globalStyles.buttonText}>Opsæt filtre</Text>
-                    </TouchableOpacity>
-                )}
-            </View>
+                </View>
                   
             </View>
         </SafeAreaView>
